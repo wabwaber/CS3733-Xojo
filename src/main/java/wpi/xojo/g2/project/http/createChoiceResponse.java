@@ -1,24 +1,21 @@
 package wpi.xojo.g2.project.http;
 
 public class createChoiceResponse {
-	public int statusCode;
-	public String error;
+	public final String response;
+	public final int httpCode;
 	
-	public createChoiceResponse (int statusCode) {
-		this.statusCode = statusCode;
-		this.error = "";
+	public createChoiceResponse (String s, int code) {
+		this.response = s;
+		this.httpCode = code;
 	}
 	
-	public createChoiceResponse(int statusCode, String errorMessage) {
-		this.statusCode = statusCode;
-		this.error = errorMessage;
+	// 200 means success
+	public createChoiceResponse (String s) {
+		this.response = s;
+		this.httpCode = 200;
 	}
 	
 	public String toString() {
-		if (statusCode / 100 == 2) {
-			return "Success creating responce";
-		} else {
-			return "ErrorResult(" + statusCode + ", err=" + error + ")";
-		}
+		return "Response(" + response + ")";
 	}
 }
