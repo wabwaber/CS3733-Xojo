@@ -1,17 +1,17 @@
 package wpi.xojo.g2.project.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Choice {
 	public final String choiceID;
 	public final String name;
-	public final String desc;
+	public final String description;
 	public final Date date;
 	
 	public Choice(String ID, String name, String desc, Date date) {
 		this.choiceID = ID;
 		this.name = name;
-		this.desc = desc;
+		this.description = desc;
 		this.date = date;
 	}
 	
@@ -20,7 +20,7 @@ public class Choice {
 		
 		if (o instanceof Choice) {
 			Choice other = (Choice) o;
-			return name.equals(other.choiceID);
+			return choiceID.equals(other.choiceID);
 		}
 		
 		return false;
