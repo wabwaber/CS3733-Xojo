@@ -19,7 +19,7 @@ public class LambdaFunctionHandlerTest {
 
     @Test
     public void testLambdaFunctionHandler() throws IOException {
-        LambdaFunctionHandler handler = new LambdaFunctionHandler();
+        CreateChoiceHandler handler = new CreateChoiceHandler();
 
         InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING.getBytes());;
         OutputStream output = new ByteArrayOutputStream();

@@ -42,6 +42,31 @@ public class ChoiceDAO {
         }
     }
     
+    public boolean addChoice(Choice choice) throws Exception {
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
+            ps.setString(1, choice.choiceID);
+            ResultSet resultSet = ps.executeQuery();
+            
+            // already present?
+            if (resultSet.next()) {
+                resultSet.close();
+                return false;
+            }
+
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name,description,date) values(?,?,?,?);");
+            ps.setString(1, choice.choiceID);
+            ps.setString(2, choice.name);
+            ps.setString(3, choice.description);
+            ps.setDate(4, choice.dateCompleted);
+            ps.execute();
+            return true;
+
+        } catch (Exception e) {
+            throw new Exception("Failed to insert constant: " + e.getMessage());
+        }
+    }
+    
     public List<Alternative> getChoiceAlternatives(String ID) throws Exception {
     	List<Alternative> alternatives = new ArrayList<>();
         try {

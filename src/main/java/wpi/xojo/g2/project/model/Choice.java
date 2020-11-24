@@ -6,13 +6,20 @@ public class Choice {
 	public final String choiceID;
 	public final String name;
 	public final String description;
-	public final Date date;
+	public final Date dateCompleted;
 	
 	public Choice(String ID, String name, String desc, Date date) {
 		this.choiceID = ID;
 		this.name = name;
 		this.description = desc;
-		this.date = date;
+		this.dateCompleted = date;
+	}
+	
+	public Choice(String ID, String name, String desc) {
+		this.choiceID = ID;
+		this.name = name;
+		this.description = desc;
+		this.dateCompleted = null;
 	}
 	
 	public boolean equals (Object o) {
