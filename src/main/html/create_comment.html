@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="UTF-8" />
+        <title>Create a Comment</title>
+
+    </head>
+    <body>
+
+        <div style="width: 100%; overflow: hidden;">
+            <div class="alt_div" style="width: 500px; float: left;">
+                <h2>Alternative</h2>
+
+                <div class="alt_name"></div>
+                <div class="description_box" data-commentid="choice_description"></div>
+                
+                <div class="button" data-commentid="Approve"></div>
+                <div class="button" data-commentid="Disapprove"></div>
+                <div class="button" data-commentid="Select this alt"></div>
+            </div>
+
+            <div class="comment_div" style="margin-left: 520px;">
+                <h2>Comments</h2>
+
+                <div class="description_box" data-commentid="Comment"></div>
+
+                <div class="button" data-commentid="Submit"></div>
+                <div class="button" data-commentid="Back"></div>
+            </div>
+        </div>
+        
+        <!-- Load React. -->
+        <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+        <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+        <!-- Load React components. -->
+        <script src="button.js"></script>
+        <script src="description_box.js"></script>
+        <script src="text_box.js"></script>
+
+
+    </body>
+</html>

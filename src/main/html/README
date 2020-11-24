@@ -1,0 +1,13 @@
+Todo:
+
+Create js elements for various buttons (approve disapprove)
+Fix alignment of some elements (comment, app, dis)
+
+elements to create:
+- Alternatives list for current choice
+- Comment list
+- Approve and disapprove buttons (colored)
+- Choice list
+
+- Delete option
+- Admin actions of a choice

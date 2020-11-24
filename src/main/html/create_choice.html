@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="UTF-8" />
+        <title>Create a Choice</title>
+
+    </head>
+    <body>
+
+        <div style="width: 100%; overflow: hidden;">
+            <div class="choice_div" style="width: 500px; float: left;">
+                <h2>Create Choice</h2>
+
+                <h3>Choice Name:</h3>
+                <div class="text_box" data-commentid="choice_text"></div>
+
+                <h3>Choice Description</h3>
+                <div class="description_box" data-commentid="choice_description"></div>
+
+                <h3>Enter number of team members:</h3>
+                <div class="text_box" data-commentid="num_mem_text"?></div>
+            </div>
+
+            <div class="alt_div" style="margin-left: 520px;">
+                <h2>Add Alternative</h2>
+
+                <h3>Alternative Name:</h3>
+                <div class="text_box" data-commentid="alternative_text"></div>
+
+                <h3>Alternative Description</h3>
+                <div class="description_box" data-commentid="alternative_description"></div>
+
+                <div class="button" data-commentid="Add"></div>
+            </div>
+        </div>
+
+        <div class="alt-list" style="margin-left: 520px;"><!-- Placeholder -->Alternatives: </div>
+        <div class="button" data-commentid="Create"></div>
+
+        
+        <!-- Load React. -->
+        <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+        <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+        <!-- Load React components. -->
+        <script src="button.js"></script>
+        <script src="description_box.js"></script>
+        <script src="text_box.js"></script>
+
+
+    </body>
+</html>

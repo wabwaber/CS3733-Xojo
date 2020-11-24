@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta charset="UTF-8" />
+        <title>Choice</title>
+
+    </head>
+    <body>
+
+        <div style="width: 100%; overflow: hidden;">
+            <div class="choice_div" style="width: 500px; float: left;">
+                <h2>Choice:</h2>
+
+                <h3>Choice Description</h3>
+                <div class="description_box" data-commentid="choice_description"></div>
+
+            </div>
+
+            <div class="alt_div" style="margin-left: 520px;">
+                <h2>Alternatives</h2>
+
+                <div class="alt_list"></div>
+            </div>
+        </div>
+        
+        <div class="selected_alt"></div>
+        
+        <!-- Load React. -->
+        <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+        <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+
+        <!-- Load React components. -->
+        <script src="button.js"></script>
+        <script src="description_box.js"></script>
+        <script src="text_box.js"></script>
+
+
+    </body>
+</html>
