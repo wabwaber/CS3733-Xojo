@@ -1,6 +1,6 @@
 function add_alternative() {
-    if (alternatives.length >= 5) {
-        alert("You may only enter 5 alternatives");
+    if (alternatives.length >= 5 || alternatives.length < 2) {
+        alert("You may only enter 2-5 alternatives");
         return;
     }
 
