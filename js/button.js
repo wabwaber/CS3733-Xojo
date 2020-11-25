@@ -8,7 +8,9 @@ class Button extends React.Component {
 
   render() {
     if (this.state.pressed) {
-      // Do something on press
+      if (this.props.commentID == 'Add') {
+        add_alternative();
+      }
     }
 
     return React.createElement(
