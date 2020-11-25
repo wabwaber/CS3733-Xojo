@@ -3,14 +3,15 @@
 class DescriptionBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: this.props.commentID }
+    this.state = { value: null }
   }
 
   render() {
+    var self = this;
     return React.createElement(
         'textarea',
-        { type: 'text', rows: 4, cols: 50, onChange: function(syntheticEvent) {
-            console.log(syntheticEvent.target.value)}
+        { type: 'text', id: this.props.commentID, rows: 4, cols: 50, onChange: function(syntheticEvent) {
+            self.state.value = syntheticEvent.target.value;}
         }
      );
     }

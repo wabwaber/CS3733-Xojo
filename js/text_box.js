@@ -10,8 +10,7 @@ class TextBox extends React.Component {
     var self = this;
     return React.createElement(
         'input',
-        { type: 'text', onChange: function(syntheticEvent) {
-            console.log(syntheticEvent.target.value);
+        { type: 'text', id: this.props.commentID, onChange: function(syntheticEvent) {
             self.state.value = syntheticEvent.target.value;}
         }
      );

@@ -11,6 +11,9 @@ class Button extends React.Component {
       if (this.props.commentID == 'Add') {
         add_alternative();
       }
+      else if (this.props.commentID == 'Create') {
+        request_choice();
+      }
     }
 
     return React.createElement(
