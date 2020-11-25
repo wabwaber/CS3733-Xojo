@@ -22,6 +22,23 @@ function request_choice() {
             // xhr.open("POST", create_url, true);
 
             // xhr.send(js);
+
+            // xhr.onloadend = function () {
+            //     console.log(xhr);
+            //     console.log(xhr.request);
+            //     if (xhr.readyState == XMLHttpRequest.DONE) {
+            //          if (xhr.status == 200) {
+            //           console.log ("XHR:" + xhr.responseText);
+            //           //Send alternatives
+            //          } else {
+            //              console.log("actual:" + xhr.responseText)
+            //               var js = JSON.parse(xhr.responseText);
+            //               var err = js["response"];
+            //               alert (err);
+            //          }
+            //     }
+            // };
+
         } else {
             alert("You must enter at least 2 alternatives");
         }
