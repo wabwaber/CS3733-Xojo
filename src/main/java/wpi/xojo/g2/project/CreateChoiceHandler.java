@@ -15,10 +15,10 @@ public class CreateChoiceHandler implements RequestHandler<CreateChoiceRequest,C
 	
 	LambdaLogger logger;
 	
-	boolean createChoice(int ID, String name, String desc) throws Exception {
+	boolean createChoice(int ID, String name, String desc, int max) throws Exception {
 		ChoiceDAO dao = new ChoiceDAO();
 		Choice exists = dao.getChoice(ID);
-		Choice choice = new Choice(ID,name,desc);
+		Choice choice = new Choice(ID,name,desc,max);
 		if (exists == null) {
 			return dao.addChoice(choice);
 		} else {
@@ -34,7 +34,7 @@ public class CreateChoiceHandler implements RequestHandler<CreateChoiceRequest,C
 		
 		CreateChoiceResponse response;
 		try {
-			if (createChoice(req.choiceID, req.choiceName, req.choiceDesc)) {
+			if (createChoice(req.choiceID, req.choiceName, req.choiceDesc, req.maxMembers)) {
 				response = new CreateChoiceResponse("" + req.choiceID);
 			} else {
 				response = new CreateChoiceResponse("" + req.choiceID, 422);

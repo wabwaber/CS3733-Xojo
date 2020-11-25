@@ -56,11 +56,12 @@ public class ChoiceDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name_str,description_str,date_completed) values(?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name_str,description_str,max_members,date_completed) values(?,?,?,?,?);");
             ps.setInt(1, choice.choiceID);
             ps.setString(2, choice.name);
             ps.setString(3, choice.description);
-            ps.setDate(4, choice.dateCompleted);
+            ps.setInt(4, choice.maxMembers);
+            ps.setDate(5, choice.dateCompleted);
             ps.execute();
             return true;
 
@@ -93,8 +94,9 @@ public class ChoiceDAO {
         int ID  = resultSet.getInt("choiceID");
         String name = resultSet.getString("name_str");
         String description = resultSet.getString("description_str");
+        int maxMembers = resultSet.getInt("max_members");
         Date date = resultSet.getDate("date_completed");
         
-        return new Choice (ID, name, description, date);
+        return new Choice (ID, name, description, maxMembers, date);
     }
 }

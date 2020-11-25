@@ -6,19 +6,22 @@ public class Choice {
 	public final int choiceID;
 	public final String name;
 	public final String description;
+	public final int maxMembers;
 	public final Date dateCompleted;
 	
-	public Choice(int ID, String name, String desc, Date date) {
+	public Choice(int ID, String name, String desc, int maxMembers, Date date) {
 		this.choiceID = ID;
 		this.name = name;
 		this.description = desc;
+		this.maxMembers = maxMembers;
 		this.dateCompleted = date;
 	}
 	
-	public Choice(int ID, String name, String desc) {
+	public Choice(int ID, String name, String desc, int maxMembers) {
 		this.choiceID = ID;
 		this.name = name;
 		this.description = desc;
+		this.maxMembers = maxMembers;
 		this.dateCompleted = null;
 	}
 	
