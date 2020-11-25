@@ -3,16 +3,23 @@ package wpi.xojo.g2.project.model;
 import java.sql.Date;
 
 public class Choice {
-	public final String choiceID;
+	public final int choiceID;
 	public final String name;
 	public final String description;
-	public final Date date;
+	public final Date dateCompleted;
 	
-	public Choice(String ID, String name, String desc, Date date) {
+	public Choice(int ID, String name, String desc, Date date) {
 		this.choiceID = ID;
 		this.name = name;
 		this.description = desc;
-		this.date = date;
+		this.dateCompleted = date;
+	}
+	
+	public Choice(int ID, String name, String desc) {
+		this.choiceID = ID;
+		this.name = name;
+		this.description = desc;
+		this.dateCompleted = null;
 	}
 	
 	public boolean equals (Object o) {
@@ -20,7 +27,7 @@ public class Choice {
 		
 		if (o instanceof Choice) {
 			Choice other = (Choice) o;
-			return choiceID.equals(other.choiceID);
+			return choiceID == (other.choiceID);
 		}
 		
 		return false;

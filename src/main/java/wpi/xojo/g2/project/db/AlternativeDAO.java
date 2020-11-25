@@ -41,10 +41,36 @@ public class AlternativeDAO {
 
 	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
 		int ID  = resultSet.getInt("alternativeID");
-        String choiceID = resultSet.getString("choiceID");
-        String description = resultSet.getString("description");
+        int choiceID = resultSet.getInt("choiceID");
+        String description = resultSet.getString("description_str");
         
         return new Alternative(ID, choiceID, description);
+	}
+
+	public boolean addAlternative(Alternative alternative) throws Exception {
+		try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ?;");
+            ps.setInt(1, alternative.alternativeID);
+            ResultSet resultSet = ps.executeQuery();
+            
+            if (resultSet.next()) {
+                resultSet.close();
+                return false;
+            }
+            
+            resultSet.close();
+            
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (alternativeID,choiceID,description_str,selected) values(?,?,?,?);");
+            ps.setInt(1, alternative.alternativeID);
+            ps.setInt(2, alternative.choiceID);
+            ps.setString(3, alternative.description);
+            ps.setBoolean(4, alternative.selected);
+            ps.execute();
+            return true;
+            
+		} catch (Exception e) {
+			throw new Exception("Failed to insert choice: " + e.getMessage());
+		}
 	}
 }
     

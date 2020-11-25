@@ -1,33 +1,14 @@
 package wpi.xojo.g2.project.http;
 
 public class ParticipateChoiceRequest {
-	String ID;
-	String name;
-	String password;
+	public String name;
+	public String password;
+	public int choiceID;
 	
-	public String getID() {
-		return ID;
-	}
-	public void setID(String iD) {
-		ID = iD;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public ParticipateChoiceRequest(String ID, String name, String password) {
-		this.ID = ID;
+	public ParticipateChoiceRequest(String name, String password, int choiceID) {
 		this.name = name;
 		this.password = password;
+		this.choiceID = choiceID;
 	}
 	
 	public ParticipateChoiceRequest() {

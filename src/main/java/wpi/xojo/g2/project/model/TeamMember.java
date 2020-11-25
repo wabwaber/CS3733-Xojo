@@ -1,23 +1,23 @@
 package wpi.xojo.g2.project.model;
 
-public class Member {
+public class TeamMember {
 	public final int memberID;
 	public final String name;
-	public final String teamID;
+	public final int choiceID;
 	public final String password;
 	
-	public Member(int ID, String name, String teamID, String password) {
+	public TeamMember(int ID, String name, int choiceID, String password) {
 		this.memberID = ID;
 		this.name = name;
-		this.teamID = teamID;
+		this.choiceID = choiceID;
 		this.password = password;
 	}
 	
 	public boolean equals (Object o) {
 		if (o == null) { return false; }
 		
-		if (o instanceof Member) {
-			Member other = (Member) o;
+		if (o instanceof TeamMember) {
+			TeamMember other = (TeamMember) o;
 			return memberID == (other.memberID);
 		}
 		
@@ -25,6 +25,6 @@ public class Member {
 	}
 	
 	public String toString() {
-		return "Name: " + name + "\tTeam: " + teamID;
+		return "Name: " + name + "\tChoice: " + choiceID;
 	}
 }

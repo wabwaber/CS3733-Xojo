@@ -21,11 +21,11 @@ public class ChoiceDAO {
     	}
     }
     
-    public Choice getChoice(String ID) throws Exception {
+    public Choice getChoice(int ID) throws Exception {
     	try {
             Choice choice = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID=?;");
-            ps.setString(1,  ID);
+            ps.setInt(1,  ID);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
@@ -39,6 +39,33 @@ public class ChoiceDAO {
         } catch (Exception e) {
         	e.printStackTrace();
             throw new Exception("Failed in getting choice: " + e.getMessage());
+        }
+    }
+    
+    public boolean addChoice(Choice choice) throws Exception {
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
+            ps.setInt(1, choice.choiceID);
+            ResultSet resultSet = ps.executeQuery();
+            
+            // already present?
+            if (resultSet.next()) {
+                resultSet.close();
+                return false;
+            }
+            
+            resultSet.close();
+
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name_str,description_str,date_completed) values(?,?,?,?);");
+            ps.setInt(1, choice.choiceID);
+            ps.setString(2, choice.name);
+            ps.setString(3, choice.description);
+            ps.setDate(4, choice.dateCompleted);
+            ps.execute();
+            return true;
+
+        } catch (Exception e) {
+            throw new Exception("Failed to insert choice: " + e.getMessage());
         }
     }
     
@@ -63,9 +90,9 @@ public class ChoiceDAO {
     }
     
     public static Choice generateChoice(ResultSet resultSet) throws Exception {
-        String ID  = resultSet.getString("choiceID");
-        String name = resultSet.getString("name");
-        String description = resultSet.getString("description");
+        int ID  = resultSet.getInt("choiceID");
+        String name = resultSet.getString("name_str");
+        String description = resultSet.getString("description_str");
         Date date = resultSet.getDate("date_completed");
         
         return new Choice (ID, name, description, date);
