@@ -21,7 +21,7 @@ public class TeamMemberDAO {
     public TeamMember getMember(int ID) throws Exception {
     	try {
             TeamMember member = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name=?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberID = ?;");
             ps.setInt(1,  ID);
             ResultSet resultSet = ps.executeQuery();
             
@@ -53,7 +53,7 @@ public class TeamMemberDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,name_str,choice_ID,password_str) values(?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,name_str,choiceID,password_str) values(?,?,?,?);");
             ps.setInt(1, member.memberID);
             ps.setString(2, member.name);
             ps.setInt(3, member.choiceID);

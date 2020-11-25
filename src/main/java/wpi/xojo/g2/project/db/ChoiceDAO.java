@@ -74,7 +74,7 @@ public class ChoiceDAO {
     	List<Alternative> alternatives = new ArrayList<>();
         try {
             Statement statement = conn.createStatement();
-            String query = "SELECT * FROM Choice C JOIN Alternative A ON C.choiceID = A.choiceID WHERE choiceID = " + ID + ";";
+            String query = "SELECT * FROM Alternative A JOIN Choice C ON C.choiceID = A.choiceID WHERE A.choiceID = " + ID + ";";
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
@@ -89,6 +89,8 @@ public class ChoiceDAO {
             throw new Exception("Failed in getting alternatives: " + e.getMessage());
         }
     }
+    
+
     
     public static Choice generateChoice(ResultSet resultSet) throws Exception {
         int ID  = resultSet.getInt("choiceID");

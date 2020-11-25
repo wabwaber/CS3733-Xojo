@@ -12,14 +12,15 @@ import wpi.xojo.g2.project.model.Alternative;
 public class AddAlternativeHandler implements RequestHandler<AddAlternativeRequest, AddAlternativeResponse> {
 	LambdaLogger logger;
 	
-	boolean addAlternative(int ID, int choiceID, String desc) throws Exception {
+	Alternative addAlternative(int ID, int choiceID, String desc) throws Exception {
 		AlternativeDAO dao = new AlternativeDAO();
 		Alternative exists = dao.getAlternative(ID);
-		Alternative choice = new Alternative(ID,choiceID,desc);
+		Alternative alternative = new Alternative(ID,choiceID,desc);
 		if (exists == null) {
-			return dao.addAlternative(choice);
+			dao.addAlternative(alternative);
+			return alternative;
 		} else {
-			return false;
+			return null;
 		}
 	}
 	
@@ -31,8 +32,9 @@ public class AddAlternativeHandler implements RequestHandler<AddAlternativeReque
 		
 		AddAlternativeResponse response;
 		try {
-			if (addAlternative(req.alternativeID, req.choiceID, req.altDesc)) {
-				response = new AddAlternativeResponse("" + req.alternativeID);
+			Alternative alternative = addAlternative(req.alternativeID, req.choiceID, req.alternativeDesc);
+			if (alternative != null) {
+				response = new AddAlternativeResponse(alternative);
 			} else {
 				response = new AddAlternativeResponse("" + req.alternativeID, 422);
 			}

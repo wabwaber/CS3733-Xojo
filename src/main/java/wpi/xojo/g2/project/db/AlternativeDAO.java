@@ -21,7 +21,7 @@ public class AlternativeDAO {
     public Alternative getAlternative(int ID) throws Exception {
     	try {
             Alternative alternative = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name=?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID=?;");
             ps.setInt(1,  ID);
             ResultSet resultSet = ps.executeQuery();
             

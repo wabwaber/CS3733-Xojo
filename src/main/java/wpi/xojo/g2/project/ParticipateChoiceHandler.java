@@ -4,9 +4,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import wpi.xojo.g2.project.db.ChoiceDAO;
 import wpi.xojo.g2.project.db.TeamMemberDAO;
 import wpi.xojo.g2.project.http.ParticipateChoiceRequest;
 import wpi.xojo.g2.project.http.ParticipateChoiceResponce;
+import wpi.xojo.g2.project.model.Choice;
 import wpi.xojo.g2.project.model.TeamMember;
 
 public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoiceRequest,ParticipateChoiceResponce> {
@@ -18,9 +20,20 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		TeamMember exists = dao.getMember(ID);
 		TeamMember member = new TeamMember(ID, name, choiceID, pass);
 		if (exists == null) {
+			dao.addMember(member);
 			return member;
 		} else {
 			return exists;
+		}
+	}
+	
+	int getChoiceMax(int ID) throws Exception {
+		ChoiceDAO dao = new ChoiceDAO();
+		Choice choice = dao.getChoice(ID);
+		if (choice == null) {
+			return -1;
+		} else {
+			return choice.maxMembers;
 		}
 	}
 	
@@ -32,7 +45,6 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		
 		ParticipateChoiceResponce response;
 		try {
-			
 			TeamMember member = createGetMember(req.memberID, req.name, req.choiceID, req.password);
 			response = new ParticipateChoiceResponce(member);
 			

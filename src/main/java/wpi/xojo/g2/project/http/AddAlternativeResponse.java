@@ -1,21 +1,29 @@
 package wpi.xojo.g2.project.http;
 
+import wpi.xojo.g2.project.model.Alternative;
+
 public class AddAlternativeResponse {
-	public final String response;
+	public final Alternative alternative;
+	public final String error;
 	public final int httpCode;
 	
 	public AddAlternativeResponse (String s, int code) {
-		this.response = s;
+		this.alternative = null;
+		this.error = s;
 		this.httpCode = code;
 	}
 	
 	// 200 means success
-	public AddAlternativeResponse (String s) {
-		this.response = s;
+	public AddAlternativeResponse (Alternative a) {
+		this.alternative = a;
+		this.error = "";
 		this.httpCode = 200;
 	}
 	
 	public String toString() {
-		return "Response(" + response + ")";
+		if (httpCode == 200) {
+			return "Response(" + alternative.toString() + ")";
+		}
+		return "Error :" + error;
 	}
 }

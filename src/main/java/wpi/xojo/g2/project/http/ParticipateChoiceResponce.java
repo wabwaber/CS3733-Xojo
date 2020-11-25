@@ -21,6 +21,9 @@ public class ParticipateChoiceResponce {
 	}
 	
 	public String toString() {
-		return "Response(" + member.toString() + ")";
+		if (httpCode == 200) {
+			return "Response(" + member.toString() + ")";
+		}
+		return "Error :" + error;
 	}
 }
