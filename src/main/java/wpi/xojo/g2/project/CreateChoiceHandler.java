@@ -16,7 +16,6 @@ public class CreateChoiceHandler implements RequestHandler<CreateChoiceRequest,C
 	LambdaLogger logger;
 	
 	boolean createChoice(int ID, String name, String desc) throws Exception {
-		if (logger != null) { logger.log("in createConstant"); }
 		ChoiceDAO dao = new ChoiceDAO();
 		Choice exists = dao.getChoice(ID);
 		Choice choice = new Choice(ID,name,desc);

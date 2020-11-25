@@ -53,8 +53,10 @@ public class ChoiceDAO {
                 resultSet.close();
                 return false;
             }
+            
+            resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name,description,date) values(?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name_str,description_str,date_completed) values(?,?,?,?);");
             ps.setInt(1, choice.choiceID);
             ps.setString(2, choice.name);
             ps.setString(3, choice.description);
@@ -63,7 +65,7 @@ public class ChoiceDAO {
             return true;
 
         } catch (Exception e) {
-            throw new Exception("Failed to insert constant: " + e.getMessage());
+            throw new Exception("Failed to insert choice: " + e.getMessage());
         }
     }
     
@@ -89,8 +91,8 @@ public class ChoiceDAO {
     
     public static Choice generateChoice(ResultSet resultSet) throws Exception {
         int ID  = resultSet.getInt("choiceID");
-        String name = resultSet.getString("name");
-        String description = resultSet.getString("description");
+        String name = resultSet.getString("name_str");
+        String description = resultSet.getString("description_str");
         Date date = resultSet.getDate("date_completed");
         
         return new Choice (ID, name, description, date);

@@ -11,12 +11,6 @@ import wpi.xojo.g2.project.model.Alternative;
 
 public class AddAlternativeHandler implements RequestHandler<AddAlternativeRequest, AddAlternativeResponse> {
 	LambdaLogger logger;
-
-	@Override
-	public AddAlternativeResponse handleRequest(AddAlternativeRequest input, Context context) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	boolean addAlternative(int ID, int choiceID, String desc) throws Exception {
 		AlternativeDAO dao = new AlternativeDAO();
@@ -26,6 +20,20 @@ public class AddAlternativeHandler implements RequestHandler<AddAlternativeReque
 			return dao.addAlternative(choice);
 		} else {
 			return false;
+		}
+	}
+	
+	@Override
+	public AddAlternativeResponse handleRequest(AddAlternativeRequest req, Context context) {
+
+		logger = context.getLogger();
+		logger.log(req.toString());
+		
+		AddAlternativeResponse response;
+		try {
+			if (addAlternative(req.alternativeID, req.choiceID, req.altDesc)) {
+				
+			}
 		}
 	}
 }

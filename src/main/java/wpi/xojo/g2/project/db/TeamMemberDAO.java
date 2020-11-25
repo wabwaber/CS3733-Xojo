@@ -7,12 +7,12 @@ import java.sql.ResultSet;
 import wpi.xojo.g2.project.model.TeamMember;
 
 
-public class MemberDAO {
+public class TeamMemberDAO {
 	java.sql.Connection conn;
 	
-	final String tblName = "Member";   // Exact capitalization
+	final String tblName = "TeamMember";   // Exact capitalization
 
-    public MemberDAO() {
+    public TeamMemberDAO() {
     	try  {
     		conn = DatabaseUtil.connect();
     	} catch (Exception e) {
@@ -27,7 +27,7 @@ public class MemberDAO {
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
-                member = MemberDAO.generateMember(resultSet);
+                member = TeamMemberDAO.generateMember(resultSet);
             }
             resultSet.close();
             ps.close();
@@ -42,10 +42,10 @@ public class MemberDAO {
     
     public static TeamMember generateMember(ResultSet resultSet) throws Exception {
     	int ID  = resultSet.getInt("memberID");
-        String name = resultSet.getString("name");
-        String teamID = resultSet.getString("teamID");
-        String password = resultSet.getString("password");
+        String name = resultSet.getString("name_Str");
+        int choiceID = resultSet.getInt("choiceID");
+        String password = resultSet.getString("password_str");
         
-        return new TeamMember(ID, name, teamID, password);
+        return new TeamMember(ID, name, choiceID, password);
     }
 }
