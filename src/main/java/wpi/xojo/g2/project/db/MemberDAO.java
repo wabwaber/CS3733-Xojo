@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import wpi.xojo.g2.project.model.Member;
+import wpi.xojo.g2.project.model.TeamMember;
 
 
 public class MemberDAO {
@@ -19,9 +19,9 @@ public class MemberDAO {
     		conn = null;
     	}
     }
-    public Member getMember(int ID) throws Exception {
+    public TeamMember getMember(int ID) throws Exception {
     	try {
-            Member member = null;
+            TeamMember member = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name=?;");
             ps.setInt(1,  ID);
             ResultSet resultSet = ps.executeQuery();
@@ -40,12 +40,12 @@ public class MemberDAO {
         }
     }
     
-    public static Member generateMember(ResultSet resultSet) throws Exception {
+    public static TeamMember generateMember(ResultSet resultSet) throws Exception {
     	int ID  = resultSet.getInt("memberID");
         String name = resultSet.getString("name");
         String teamID = resultSet.getString("teamID");
         String password = resultSet.getString("password");
         
-        return new Member(ID, name, teamID, password);
+        return new TeamMember(ID, name, teamID, password);
     }
 }

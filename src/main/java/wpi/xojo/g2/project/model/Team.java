@@ -2,10 +2,10 @@ package wpi.xojo.g2.project.model;
 
 public class Team {
 	public final int teamID;
-	public final String choiceID;
+	public final int choiceID;
 	public final int maxMembers;
 	
-	public Team(int ID, String choiceID, int maxMembers) {
+	public Team(int ID, int choiceID, int maxMembers) {
 		this.teamID = ID;
 		this.choiceID = choiceID;
 		this.maxMembers = maxMembers;

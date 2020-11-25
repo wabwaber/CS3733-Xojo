@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wpi.xojo.g2.project.model.Alternative;
-import wpi.xojo.g2.project.model.Member;
+import wpi.xojo.g2.project.model.TeamMember;
 import wpi.xojo.g2.project.model.Team;
 
 public class TeamDAO {
@@ -44,15 +44,15 @@ public class TeamDAO {
         }
     }
     
-    public List<Member> getTeamMembers(int ID) throws Exception {
-    	List<Member> members = new ArrayList<>();
+    public List<TeamMember> getTeamMembers(int ID) throws Exception {
+    	List<TeamMember> members = new ArrayList<>();
         try {
             Statement statement = conn.createStatement();
             String query = "SELECT * FROM Team T JOIN Member M ON T.teamID = M.teamID WHERE teamID = " + ID + ";";
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-            	Member m = MemberDAO.generateMember(resultSet);
+            	TeamMember m = MemberDAO.generateMember(resultSet);
             	members.add(m);
             }
             resultSet.close();
@@ -66,7 +66,7 @@ public class TeamDAO {
     
     public static Team generateTeam(ResultSet resultSet) throws Exception {
     	int ID  = resultSet.getInt("teamID");
-        String choiceID = resultSet.getString("choiceID");
+        int choiceID = resultSet.getInt("choiceID");
         int maxMembers = resultSet.getInt("maxMembers");
         
         return new Team(ID, choiceID, maxMembers);

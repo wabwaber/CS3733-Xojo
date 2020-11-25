@@ -41,10 +41,15 @@ public class AlternativeDAO {
 
 	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
 		int ID  = resultSet.getInt("alternativeID");
-        String choiceID = resultSet.getString("choiceID");
+        int choiceID = resultSet.getInt("choiceID");
         String description = resultSet.getString("description");
         
         return new Alternative(ID, choiceID, description);
+	}
+
+	public boolean addAlternative(Alternative choice) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
     

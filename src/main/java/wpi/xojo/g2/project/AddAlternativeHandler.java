@@ -9,8 +9,6 @@ import wpi.xojo.g2.project.http.AddAlternativeRequest;
 import wpi.xojo.g2.project.http.AddAlternativeResponse;
 import wpi.xojo.g2.project.model.Alternative;
 
-
-
 public class AddAlternativeHandler implements RequestHandler<AddAlternativeRequest, AddAlternativeResponse> {
 	LambdaLogger logger;
 
@@ -20,8 +18,7 @@ public class AddAlternativeHandler implements RequestHandler<AddAlternativeReque
 		return null;
 	}
 	
-	boolean addAlternative(int ID, String choiceID, String desc) {
-		if (logger != null) { logger.log("in createConstant"); }
+	boolean addAlternative(int ID, int choiceID, String desc) throws Exception {
 		AlternativeDAO dao = new AlternativeDAO();
 		Alternative exists = dao.getAlternative(ID);
 		Alternative choice = new Alternative(ID,choiceID,desc);
@@ -30,6 +27,5 @@ public class AddAlternativeHandler implements RequestHandler<AddAlternativeReque
 		} else {
 			return false;
 		}
-	}
 	}
 }

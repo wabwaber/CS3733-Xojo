@@ -21,11 +21,11 @@ public class ChoiceDAO {
     	}
     }
     
-    public Choice getChoice(String ID) throws Exception {
+    public Choice getChoice(int ID) throws Exception {
     	try {
             Choice choice = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID=?;");
-            ps.setString(1,  ID);
+            ps.setInt(1,  ID);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
@@ -45,7 +45,7 @@ public class ChoiceDAO {
     public boolean addChoice(Choice choice) throws Exception {
         try {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
-            ps.setString(1, choice.choiceID);
+            ps.setInt(1, choice.choiceID);
             ResultSet resultSet = ps.executeQuery();
             
             // already present?
@@ -55,7 +55,7 @@ public class ChoiceDAO {
             }
 
             ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name,description,date) values(?,?,?,?);");
-            ps.setString(1, choice.choiceID);
+            ps.setInt(1, choice.choiceID);
             ps.setString(2, choice.name);
             ps.setString(3, choice.description);
             ps.setDate(4, choice.dateCompleted);
@@ -88,7 +88,7 @@ public class ChoiceDAO {
     }
     
     public static Choice generateChoice(ResultSet resultSet) throws Exception {
-        String ID  = resultSet.getString("choiceID");
+        int ID  = resultSet.getInt("choiceID");
         String name = resultSet.getString("name");
         String description = resultSet.getString("description");
         Date date = resultSet.getDate("date_completed");
