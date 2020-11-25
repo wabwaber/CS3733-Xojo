@@ -1,15 +1,14 @@
 package wpi.xojo.g2.project.http;
 
 public class ParticipateChoiceRequest {
-	public String ID;
 	public String name;
 	public String password;
+	public int choiceID;
 	
-	
-	public ParticipateChoiceRequest(String ID, String name, String password) {
-		this.ID = ID;
+	public ParticipateChoiceRequest(String name, String password, int choiceID) {
 		this.name = name;
 		this.password = password;
+		this.choiceID = choiceID;
 	}
 	
 	public ParticipateChoiceRequest() {

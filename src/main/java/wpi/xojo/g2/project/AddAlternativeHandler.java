@@ -32,8 +32,14 @@ public class AddAlternativeHandler implements RequestHandler<AddAlternativeReque
 		AddAlternativeResponse response;
 		try {
 			if (addAlternative(req.alternativeID, req.choiceID, req.altDesc)) {
-				
+				response = new AddAlternativeResponse("" + req.alternativeID);
+			} else {
+				response = new AddAlternativeResponse("" + req.alternativeID, 422);
 			}
+		} catch (Exception e) {
+			response = new AddAlternativeResponse("Unable to add alternative: " +  req.alternativeID + " (" + e.getMessage() + ")", 400);
 		}
+		
+		return response;
 	}
 }
