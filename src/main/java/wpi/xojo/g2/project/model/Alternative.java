@@ -6,6 +6,13 @@ public class Alternative {
 	public final String description;
 	public boolean selected;
 	
+	public Alternative(int ID, String choiceID, String desc, boolean selected) {
+		this.alternativeID = ID;
+		this.choiceID = choiceID;
+		this.description = desc;
+		this.selected = selected;
+	}
+	
 	public Alternative(int ID, String choiceID, String desc) {
 		this.alternativeID = ID;
 		this.choiceID = choiceID;
