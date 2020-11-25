@@ -69,7 +69,7 @@ public class ChoiceDAO {
         }
     }
     
-    public List<Alternative> getChoiceAlternatives(String ID) throws Exception {
+    public List<Alternative> getChoiceAlternatives(int ID) throws Exception {
     	List<Alternative> alternatives = new ArrayList<>();
         try {
             Statement statement = conn.createStatement();

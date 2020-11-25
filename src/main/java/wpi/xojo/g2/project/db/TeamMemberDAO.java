@@ -1,10 +1,8 @@
 package wpi.xojo.g2.project.db;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import wpi.xojo.g2.project.model.Choice;
 import wpi.xojo.g2.project.model.TeamMember;
 
 

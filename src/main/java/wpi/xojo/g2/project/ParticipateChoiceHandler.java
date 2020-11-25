@@ -5,7 +5,6 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import wpi.xojo.g2.project.db.TeamMemberDAO;
-import wpi.xojo.g2.project.http.CreateChoiceResponse;
 import wpi.xojo.g2.project.http.ParticipateChoiceRequest;
 import wpi.xojo.g2.project.http.ParticipateChoiceResponce;
 import wpi.xojo.g2.project.model.TeamMember;
@@ -14,23 +13,17 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 	
 	LambdaLogger logger;
 	
-	boolean createMember(int ID, String name, int teamID, String pass) throws Exception {
+	TeamMember createGetMember(int ID, String name, int choiceID, String pass) throws Exception {
 		TeamMemberDAO dao = new TeamMemberDAO();
 		TeamMember exists = dao.getMember(ID);
-		TeamMember member = new TeamMember(ID, name, teamID, pass);
+		TeamMember member = new TeamMember(ID, name, choiceID, pass);
 		if (exists == null) {
-			return dao.addMember(member);
+			return member;
 		} else {
-			return false;
+			return exists;
 		}
 	}
 	
-	boolean hasMember(int ID) throws Exception {
-		TeamMemberDAO dao = new TeamMemberDAO();
-		TeamMember exists = dao.getMember(ID);
-		return exists != null;
-	}
-
 	@Override
 	public ParticipateChoiceResponce handleRequest(ParticipateChoiceRequest req, Context context) {
 		
@@ -39,13 +32,9 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		
 		ParticipateChoiceResponce response;
 		try {
-			if (createMember(req.memberID, req.name, req.choiceID, req.password)) {
-				response = new ParticipateChoiceResponce("" + req.memberID);
-			} else if (hasMember(req.memberID)){
-				response = new ParticipateChoiceResponce("" + req.memberID);
-			} else {
-				response = new ParticipateChoiceResponce("" + req.memberID, 422);
-			}
+			
+			TeamMember member = createGetMember(req.memberID, req.name, req.choiceID, req.password);
+			response = new ParticipateChoiceResponce(member);
 			
 		} catch (Exception e) {
 			response = new ParticipateChoiceResponce("Unable to participate member: " + req.memberID + " (" + e.getMessage() + ")", 400);

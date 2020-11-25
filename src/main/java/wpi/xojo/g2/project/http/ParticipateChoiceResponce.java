@@ -1,21 +1,26 @@
 package wpi.xojo.g2.project.http;
 
+import wpi.xojo.g2.project.model.TeamMember;
+
 public class ParticipateChoiceResponce {
-	public final String response;
+	public final TeamMember member;
+	public final String error;
 	public final int httpCode;
 	
-	public ParticipateChoiceResponce (String s, int code) {
-		this.response = s;
+	public ParticipateChoiceResponce (String error, int code) {
+		this.member = null;
+		this.error = error;
 		this.httpCode = code;
 	}
 	
 	// 200 means success
-	public ParticipateChoiceResponce (String s) {
-		this.response = s;
+	public ParticipateChoiceResponce (TeamMember m) {
+		this.member = m;
+		this.error = "";
 		this.httpCode = 200;
 	}
 	
 	public String toString() {
-		return "Response(" + response + ")";
+		return "Response(" + member.toString() + ")";
 	}
 }
