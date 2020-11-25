@@ -9,8 +9,20 @@
     <body>
 
         <div class="choice_name"></div>
-        <div class="username_box"></div>
-        <div class="password_box"></div>
+        <div>
+            <p>
+                Username:
+            </p>
+            <div class="text_box" data-commentid="user_id"></div>
+        </div>
+        <div>
+            <p>
+                Password:
+            </p>
+            <div class="text_box" data-commentid="password"></div>
+        </div>
+
+        <div class="button" data-commentid="Login"></div>
         
         <!-- Load React. -->
         <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
@@ -21,7 +33,7 @@
         <script src="../js/button.js"></script>
         <script src="../js/description_box.js"></script>
         <script src="../js/text_box.js"></script>
-
+        <script src="../js/choice_name.js"></script>
 
     </body>
 </html>
