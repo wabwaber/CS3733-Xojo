@@ -1,0 +1,1 @@
+{"lastDeploymentHandler":"wpi.xojo.g2.project.ParticipateChoiceHandler","lastInvokeHandler":null,"handlerMetadata":{"wpi.xojo.g2.project.ParticipateChoiceHandler":{"deployment":{"regionId":"us-east-2","awsLambdaFunctionName":"choiceHandler","awsIamRoleName":"developer","awsS3BucketName":"3733xojo","memory":0,"timeout":0},"invoke":null}},"lastInvokedHandlerDeployed":false}
