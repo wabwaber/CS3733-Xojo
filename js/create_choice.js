@@ -59,6 +59,7 @@ function request_choice() {
                                     console.log("Alternative added");
                                 } else {
                                     alert("Something went wrong.");
+                                    return;
                                 }
                             } 
                         }
@@ -70,16 +71,21 @@ function request_choice() {
                         return;
                     }
                 }
+                
+                // When done with alts, move to login page
+                window.location.href = 'user_login.html?id=' + choice_id;
             };
 
             
 
         } else {
             alert("You must enter at least 2 alternatives");
+            return;
         }
 
     } else {
         alert("You must enter a name and a description for the Choice");
+        return;
     }
     
 
