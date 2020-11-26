@@ -18,11 +18,12 @@ public class TeamMemberDAO {
     		conn = null;
     	}
     }
-    public TeamMember getMember(int ID) throws Exception {
+    public TeamMember getMember(String name, int choiceID) throws Exception {
     	try {
             TeamMember member = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberID = ?;");
-            ps.setInt(1,  ID);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name_str = ? and choiceID = ?;");
+            ps.setString(1,  name);
+            ps.setInt(2, choiceID);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {

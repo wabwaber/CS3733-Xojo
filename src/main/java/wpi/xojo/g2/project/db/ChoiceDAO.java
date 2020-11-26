@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
+
 import wpi.xojo.g2.project.model.Alternative;
 import wpi.xojo.g2.project.model.Choice;
 
@@ -70,6 +72,27 @@ public class ChoiceDAO {
         }
     }
     
+    public int getMemberCount(int ID) throws Exception {
+    	try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
+            ps.setInt(1, ID);
+            ResultSet resultSet = ps.executeQuery();
+            
+            // already present?
+            if (resultSet.next()) {
+                resultSet.close();
+                return -1;
+            }
+            
+            resultSet.close();
+            
+            return 1;
+
+        } catch (Exception e) {
+            throw new Exception("Failed to get choice: " + e.getMessage());
+        }
+	}
+    
     public List<Alternative> getChoiceAlternatives(int ID) throws Exception {
     	List<Alternative> alternatives = new ArrayList<>();
         try {
@@ -101,4 +124,5 @@ public class ChoiceDAO {
         
         return new Choice (ID, name, description, maxMembers, date);
     }
+
 }

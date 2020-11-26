@@ -17,13 +17,16 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 	
 	TeamMember createGetMember(int ID, String name, int choiceID, String pass) throws Exception {
 		TeamMemberDAO dao = new TeamMemberDAO();
-		TeamMember exists = dao.getMember(ID);
+		TeamMember exists = dao.getMember(name, choiceID);
 		TeamMember member = new TeamMember(ID, name, choiceID, pass);
+		boolean correctPass = (exists != null && exists.password.equals(pass));
 		if (exists == null) {
 			dao.addMember(member);
 			return member;
-		} else {
+		} else if (correctPass) {
 			return exists;
+		} else {
+			return null;
 		}
 	}
 	
@@ -37,6 +40,17 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		}
 	}
 	
+	int getChoiceMemberCount(int ID) throws Exception {
+		ChoiceDAO dao = new ChoiceDAO();
+		Choice choice = dao.getChoice(ID);
+		if (choice == null) {
+			return -1;
+		} else {
+			int count = dao.getMemberCount(ID);
+			return count;
+		}
+	}
+	
 	@Override
 	public ParticipateChoiceResponce handleRequest(ParticipateChoiceRequest req, Context context) {
 		
@@ -45,11 +59,16 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		
 		ParticipateChoiceResponce response;
 		try {
-			TeamMember member = createGetMember(req.memberID, req.name, req.choiceID, req.password);
-			response = new ParticipateChoiceResponce(member);
+			int randID = (int) (Math.random() * 1000000000);
+			TeamMember member = createGetMember(randID, req.name, req.choiceID, req.password);
+			if (member != null) {
+				response = new ParticipateChoiceResponce(member);
+			} else {
+				response = new ParticipateChoiceResponce("Wrong password", 401);
+			}
 			
 		} catch (Exception e) {
-			response = new ParticipateChoiceResponce("Unable to participate member: " + req.memberID + " (" + e.getMessage() + ")", 400);
+			response = new ParticipateChoiceResponce("Unable to participate member: " + req.name + " (" + e.getMessage() + ")", 400);
 		}
 		
 		return response;
