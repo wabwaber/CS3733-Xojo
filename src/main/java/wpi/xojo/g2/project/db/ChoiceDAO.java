@@ -74,19 +74,21 @@ public class ChoiceDAO {
     
     public int getMemberCount(int ID) throws Exception {
     	try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
-            ps.setInt(1, ID);
-            ResultSet resultSet = ps.executeQuery();
+    		Statement statement = conn.createStatement();
+            String query = "SELECT COUNT(TeamMemberID) AS memberCount FROM Choice C join TeamMember TM on C.choiceID = TM.ChoiceID;";
+            ResultSet resultSet = statement.executeQuery(query);
             
             // already present?
             if (resultSet.next()) {
+                int count = resultSet.getInt("memberCount");
                 resultSet.close();
-                return -1;
+                return count;
+                
             }
             
             resultSet.close();
-            
-            return 1;
+            statement.close();
+            return -1;
 
         } catch (Exception e) {
             throw new Exception("Failed to get choice: " + e.getMessage());
