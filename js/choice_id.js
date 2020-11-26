@@ -1,6 +1,6 @@
 'use strict';
 
-class ChoiceName extends React.Component {
+class ChoiceID extends React.Component {
   constructor(props) {
     super(props);
     this.state = { };
@@ -10,18 +10,18 @@ class ChoiceName extends React.Component {
     return React.createElement(
       'h2',
       { },
-      'Choice ID: ' + window.location.pathname
+      'Choice ID: ' + window.location.search.substring(4)
     );
   }
 }
 
 // Find all DOM containers, and render Like buttons into them.
-document.querySelectorAll('.choice_name')
+document.querySelectorAll('.choice_id')
   .forEach(domContainer => {
     // Read the comment ID from a data-* attribute.
     const commentID = domContainer.dataset.commentid;
     ReactDOM.render(
-      React.createElement(ChoiceName, { commentID: commentID }),
+      React.createElement(ChoiceID, { commentID: commentID }),
       domContainer
     );
   });
