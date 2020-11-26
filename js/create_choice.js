@@ -36,17 +36,43 @@ function request_choice() {
                 console.log(xhr);
                 console.log(xhr.request);
                 if (xhr.readyState == XMLHttpRequest.DONE) {
-                     if (xhr.status == 200) {
-                      console.log ("XHR:" + xhr.responseText);
-                      //Send alternatives
-                     } else {
-                         console.log("actual:" + xhr.responseText)
-                          var js = JSON.parse(xhr.responseText);
-                          var err = js["response"];
-                          alert (err);
-                     }
+                    if (xhr.status == 200) {
+                        console.log ("XHR:" + xhr.responseText);
+
+                        for (const alternative of alternatives) {
+                            var alt_data = {};
+                            alt_data["alternativeID"] = alternative[0];
+                            alt_data["choiceID"] = choice_id;
+                            // alt_data["alternativeName"] = alternative[1];
+                            alt_data["alternativeDesc"] = alternative[2];
+
+                            var alt_js = JSON.stringify(alt_data);
+                            console.log("JS:" + alt_js);
+                            var alt_xhr = new XMLHttpRequest();
+                            alt_xhr.open("POST", add_alt_url, false);
+
+                            alt_xhr.send(alt_js);
+
+                            if (alt_xhr.readyState == XMLHttpRequest.DONE) {
+                                if (alt_xhr.status == 200) {
+                                    console.log ("XHR:" + alt_xhr.responseText);
+                                    console.log("Alternative added");
+                                } else {
+                                    alert("Something went wrong.");
+                                }
+                            } 
+                        }
+                    } else {
+                        console.log("actual:" + xhr.responseText)
+                        var js = JSON.parse(xhr.responseText);
+                        var err = js["response"];
+                        alert (err);
+                        return;
+                    }
                 }
             };
+
+            
 
         } else {
             alert("You must enter at least 2 alternatives");
