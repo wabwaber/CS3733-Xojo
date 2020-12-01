@@ -72,11 +72,8 @@ function request_choice() {
                     }
                 }
                 
-                // When done with alts, move to login page
                 window.location.href = 'user_login.html?id=' + choice_id;
             };
-
-            
 
         } else {
             alert("You must enter at least 2 alternatives");
