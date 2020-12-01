@@ -23,7 +23,7 @@ public class AddAlternativeHandlerTest extends LambdaTest {
 	
 	@Test
 	public void test() {
-		AddAlternativeRequest ccr = new AddAlternativeRequest("a667170f-ee95-48ac-8ee4-45a3560f672f", "test name", "test desc");
+		AddAlternativeRequest ccr = new AddAlternativeRequest("a667170f-ee95-48ac-8ee4-45a3560f672f", "test name2");
 		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
 		
 		try {

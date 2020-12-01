@@ -39,16 +39,6 @@ public class AlternativeDAO {
         }
     }
 
-	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
-		String ID  = resultSet.getString("alternativeID");
-        String choiceID = resultSet.getString("choiceID");
-        String name = resultSet.getString("name_str");
-        String description = resultSet.getString("description_str");
-        boolean selected = resultSet.getBoolean("selected");
-        
-        return new Alternative(ID, choiceID, name, description, selected);
-	}
-
 	public boolean addAlternative(Alternative alternative) throws Exception {
 		try {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ?;");
@@ -62,18 +52,26 @@ public class AlternativeDAO {
             
             resultSet.close();
             
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (alternativeID,choiceID,name_str,description_str,selected) values(?,?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (alternativeID,choiceID,alternativeDesc,selected) values(?,?,?,?);");
             ps.setString(1, alternative.alternativeID);
             ps.setString(2, alternative.choiceID);
-            ps.setString(3, alternative.name);
-            ps.setString(4, alternative.description);
-            ps.setBoolean(5, alternative.selected);
+            ps.setString(3, alternative.description);
+            ps.setBoolean(4, alternative.selected);
             ps.execute();
             return true;
             
 		} catch (Exception e) {
 			throw new Exception("Failed to insert choice: " + e.getMessage());
 		}
+	}
+	
+	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
+		String ID  = resultSet.getString("alternativeID");
+        String choiceID = resultSet.getString("choiceID");
+        String description = resultSet.getString("description_str");
+        boolean selected = resultSet.getBoolean("selected");
+        
+        return new Alternative(ID, choiceID, description, selected);
 	}
 }
     

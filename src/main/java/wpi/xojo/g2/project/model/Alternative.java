@@ -5,24 +5,21 @@ import java.util.UUID;
 public class Alternative {
 	public final String alternativeID;
 	public final String choiceID;
-	public final String name;
 	public final String description;
 	public final boolean selected;
 	
-	public Alternative(String ID, String choiceID, String name, String desc, boolean selected) {
+	public Alternative(String ID, String choiceID, String desc, boolean selected) {
 		this.alternativeID = ID;
 		this.choiceID = choiceID;
-		this.name = name;
 		this.description = desc;
 		this.selected = selected;
 	}
 	
 	
-	public Alternative(String choiceID, String name, String desc) {
+	public Alternative(String choiceID, String desc) {
 		String id = UUID.randomUUID().toString();
 		this.alternativeID = id;
 		this.choiceID = choiceID;
-		this.name = name;
 		this.description = desc;
 		this.selected = false;
 	}

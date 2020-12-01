@@ -1,6 +1,6 @@
 package wpi.xojo.g2.project.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class Choice {
@@ -8,9 +8,9 @@ public class Choice {
 	public final String name;
 	public final String description;
 	public final int maxMembers;
-	public final Date dateCreated;
+	public final Timestamp dateCreated;
 	
-	public Choice(String ID, String name, String desc, int maxMembers, Date date) {
+	public Choice(String ID, String name, String desc, int maxMembers, Timestamp date) {
 		this.choiceID = ID;
 		this.name = name;
 		this.description = desc;
@@ -23,8 +23,9 @@ public class Choice {
 		this.choiceID = id;
 		this.name = name;
 		this.description = desc;
-		this.maxMembers = maxMembers;
-		this.dateCreated = null;
+		this.maxMembers = maxMembers;	
+		Timestamp d = new Timestamp(java.lang.System.currentTimeMillis());
+		this.dateCreated = d;
 	}
 	
 

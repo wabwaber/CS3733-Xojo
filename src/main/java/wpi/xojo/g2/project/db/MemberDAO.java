@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 import wpi.xojo.g2.project.model.TeamMember;
 
 
-public class TeamMemberDAO {
+public class MemberDAO {
 	java.sql.Connection conn;
 	
 	final String tblName = "TeamMember";   // Exact capitalization
 
-    public TeamMemberDAO() {
+    public MemberDAO() {
     	try  {
     		conn = DatabaseUtil.connect();
     	} catch (Exception e) {
@@ -21,13 +21,13 @@ public class TeamMemberDAO {
     public TeamMember getMember(String name, String choiceID) throws Exception {
     	try {
             TeamMember member = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name_str = ? and choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberName = ? and choiceID = ?;");
             ps.setString(1,  name);
             ps.setString(2, choiceID);
             ResultSet resultSet = ps.executeQuery();
             
             if (resultSet.next()) {
-                member = TeamMemberDAO.generateMember(resultSet);
+                member = MemberDAO.generateMember(resultSet);
             }
             resultSet.close();
             ps.close();
@@ -42,7 +42,7 @@ public class TeamMemberDAO {
     
     public boolean addMember(TeamMember member) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name_str = ? and choiceID = ;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberName = ? and choiceID = ;");
             ps.setString(1, member.name);
             ps.setString(2, member.choiceID);
             ResultSet resultSet = ps.executeQuery();
@@ -55,7 +55,7 @@ public class TeamMemberDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,choiceID,name_str,password_str) values(?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,choiceID,memberName,memberPass) values(?,?,?,?);");
             ps.setString(1, member.memberID);
             ps.setString(2, member.choiceID);
             ps.setString(3, member.name);
@@ -70,9 +70,9 @@ public class TeamMemberDAO {
     
     public static TeamMember generateMember(ResultSet resultSet) throws Exception {
     	String ID  = resultSet.getString("memberID");
-        String name = resultSet.getString("name_Str");
-        String choiceID = resultSet.getString("choiceID");
-        String password = resultSet.getString("password_str");
+    	String choiceID = resultSet.getString("choiceID");
+        String name = resultSet.getString("memberName");
+        String password = resultSet.getString("memberPass");
         
         return new TeamMember(ID, choiceID, name, password);
     }

@@ -5,7 +5,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import wpi.xojo.g2.project.db.ChoiceDAO;
-import wpi.xojo.g2.project.db.TeamMemberDAO;
+import wpi.xojo.g2.project.db.MemberDAO;
 import wpi.xojo.g2.project.http.ParticipateChoiceRequest;
 import wpi.xojo.g2.project.http.ParticipateChoiceResponce;
 import wpi.xojo.g2.project.model.Choice;
@@ -16,7 +16,7 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 	LambdaLogger logger;
 	
 	TeamMember createGetMember(String choiceID, String name, String pass) throws Exception {
-		TeamMemberDAO dao = new TeamMemberDAO();
+		MemberDAO dao = new MemberDAO();
 		TeamMember exists = dao.getMember(name, choiceID);
 		TeamMember member = new TeamMember(choiceID, name, pass);
 		boolean correctPass = (exists != null && exists.password.equals(pass));

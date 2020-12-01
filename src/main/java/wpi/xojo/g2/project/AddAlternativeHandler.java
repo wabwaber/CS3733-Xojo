@@ -12,9 +12,9 @@ import wpi.xojo.g2.project.model.Alternative;
 public class AddAlternativeHandler implements RequestHandler<AddAlternativeRequest, AddAlternativeResponse> {
 	LambdaLogger logger;
 	
-	Alternative addAlternative(String choiceID, String name, String desc) throws Exception {
+	Alternative addAlternative(String choiceID, String desc) throws Exception {
 		AlternativeDAO dao = new AlternativeDAO();
-		Alternative alternative = new Alternative(choiceID, name, desc);
+		Alternative alternative = new Alternative(choiceID, desc);
 		if (dao.addAlternative(alternative)) {
 			return alternative;
 		}
@@ -29,14 +29,14 @@ public class AddAlternativeHandler implements RequestHandler<AddAlternativeReque
 		
 		AddAlternativeResponse response;
 		try {
-			Alternative alternative = addAlternative(req.choiceID, req.alternativeName,  req.alternativeDesc);
+			Alternative alternative = addAlternative(req.choiceID, req.alternativeDesc);
 			if (alternative != null) {
 				response = new AddAlternativeResponse(alternative);
 			} else {
-				response = new AddAlternativeResponse("Failed to add alternative: " + req.alternativeName, 422);
+				response = new AddAlternativeResponse("Failed to add alternative: " + req.choiceID, 422);
 			}
 		} catch (Exception e) {
-			response = new AddAlternativeResponse("Unable to add alternative: " +  req.alternativeName + " (" + e.getMessage() + ")", 400);
+			response = new AddAlternativeResponse("Unable to add alternative: " +  req.choiceID + " (" + e.getMessage() + ")", 400);
 		}
 		
 		return response;
