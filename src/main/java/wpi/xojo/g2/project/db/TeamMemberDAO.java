@@ -26,7 +26,7 @@ public class TeamMemberDAO {
             ps.setString(2, choiceID);
             ResultSet resultSet = ps.executeQuery();
             
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 member = TeamMemberDAO.generateMember(resultSet);
             }
             resultSet.close();
@@ -57,8 +57,8 @@ public class TeamMemberDAO {
 
             ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,choiceID,name_str,password_str) values(?,?,?,?);");
             ps.setString(1, member.memberID);
-            ps.setString(3, member.choiceID);
-            ps.setString(2, member.name);
+            ps.setString(2, member.choiceID);
+            ps.setString(3, member.name);
             ps.setString(4, member.password);
             ps.execute();
             return true;
