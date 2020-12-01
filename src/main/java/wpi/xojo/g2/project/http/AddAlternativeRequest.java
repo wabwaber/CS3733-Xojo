@@ -1,14 +1,14 @@
 package wpi.xojo.g2.project.http;
 
 public class AddAlternativeRequest {
-	public int alternativeID;
+	public String choiceID;
+	public String alternativeName;
 	public String alternativeDesc;
-	public int choiceID;
 	
-	public AddAlternativeRequest(int altID, String altDesc, int choiceID) {
-		this.alternativeID = altID;
-		this.alternativeDesc = altDesc;
+	public AddAlternativeRequest(String choiceID, String name, String desc) {
 		this.choiceID = choiceID;
+		this.alternativeName = name;
+		this.alternativeDesc = desc;
 	}
 	
 	public AddAlternativeRequest() {

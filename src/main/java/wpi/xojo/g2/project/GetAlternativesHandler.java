@@ -16,7 +16,7 @@ public class GetAlternativesHandler implements RequestHandler<GetAlternativesReq
 	public LambdaLogger logger;
 
 	
-	List<Alternative> getAlternatives(int ID) throws Exception {
+	List<Alternative> getAlternatives(String ID) throws Exception {
 		ChoiceDAO dao = new ChoiceDAO();
 		return dao.getChoiceAlternatives(ID);
 	}

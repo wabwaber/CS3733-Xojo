@@ -18,11 +18,11 @@ public class AlternativeDAO {
     	}
     }
     
-    public Alternative getAlternative(int ID) throws Exception {
+    public Alternative getAlternative(String ID) throws Exception {
     	try {
             Alternative alternative = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID=?;");
-            ps.setInt(1,  ID);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ?");
+            ps.setString(1,  ID);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
@@ -40,17 +40,19 @@ public class AlternativeDAO {
     }
 
 	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
-		int ID  = resultSet.getInt("alternativeID");
-        int choiceID = resultSet.getInt("choiceID");
+		String ID  = resultSet.getString("alternativeID");
+        String choiceID = resultSet.getString("choiceID");
+        String name = resultSet.getString("name_str");
         String description = resultSet.getString("description_str");
+        boolean selected = resultSet.getBoolean("selected");
         
-        return new Alternative(ID, choiceID, description);
+        return new Alternative(ID, choiceID, name, description, selected);
 	}
 
 	public boolean addAlternative(Alternative alternative) throws Exception {
 		try {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ?;");
-            ps.setInt(1, alternative.alternativeID);
+            ps.setString(1, alternative.alternativeID);
             ResultSet resultSet = ps.executeQuery();
             
             if (resultSet.next()) {
@@ -60,11 +62,12 @@ public class AlternativeDAO {
             
             resultSet.close();
             
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (alternativeID,choiceID,description_str,selected) values(?,?,?,?);");
-            ps.setInt(1, alternative.alternativeID);
-            ps.setInt(2, alternative.choiceID);
-            ps.setString(3, alternative.description);
-            ps.setBoolean(4, alternative.selected);
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (alternativeID,choiceID,name_str,description_str,selected) values(?,?,?,?,?);");
+            ps.setString(1, alternative.alternativeID);
+            ps.setString(2, alternative.choiceID);
+            ps.setString(3, alternative.name);
+            ps.setString(4, alternative.description);
+            ps.setBoolean(5, alternative.selected);
             ps.execute();
             return true;
             

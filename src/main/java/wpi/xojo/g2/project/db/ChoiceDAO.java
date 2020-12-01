@@ -4,8 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-
 import wpi.xojo.g2.project.model.Alternative;
 import wpi.xojo.g2.project.model.Choice;
 
@@ -23,11 +21,17 @@ public class ChoiceDAO {
     	}
     }
     
-    public Choice getChoice(int ID) throws Exception {
+    /**
+     * Gets the choice from the database
+     * @param ID the choiceID
+     * @return The choice with the corresponding choiceID
+     * @throws Exception
+     */
+    public Choice getChoice(String ID) throws Exception {
     	try {
             Choice choice = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID=?;");
-            ps.setInt(1,  ID);
+            ps.setString(1,  ID);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
@@ -44,10 +48,16 @@ public class ChoiceDAO {
         }
     }
     
+    /**
+     * Adds a choice to the database
+     * @param choice The choice to be added
+     * @return Whether or not the adding was successful
+     * @throws Exception
+     */
     public boolean addChoice(Choice choice) throws Exception {
         try {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
-            ps.setInt(1, choice.choiceID);
+            ps.setString(1, choice.choiceID);
             ResultSet resultSet = ps.executeQuery();
             
             // already present?
@@ -58,12 +68,12 @@ public class ChoiceDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name_str,description_str,max_members,date_completed) values(?,?,?,?,?);");
-            ps.setInt(1, choice.choiceID);
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,name_str,description_str,max_members,date_created) values(?,?,?,?,?);");
+            ps.setString(1, choice.choiceID);
             ps.setString(2, choice.name);
             ps.setString(3, choice.description);
             ps.setInt(4, choice.maxMembers);
-            ps.setDate(5, choice.dateCompleted);
+            ps.setDate(5, choice.dateCreated);
             ps.execute();
             return true;
 
@@ -72,31 +82,40 @@ public class ChoiceDAO {
         }
     }
     
-    public int getMemberCount(int ID) throws Exception {
+    /**
+     * Gets the amount of members currently in a choice
+     * @param ID The choiceID
+     * @return the number of members currently in a choice
+     * @throws Exception
+     */
+    public int getMemberCount(String ID) throws Exception {
     	try {
     		Statement statement = conn.createStatement();
-            String query = "SELECT COUNT(TeamMemberID) AS memberCount FROM Choice C join TeamMember TM on C.choiceID = TM.ChoiceID;";
+            String query = "SELECT * memberCount FROM Choice C join TeamMember TM on C.choiceID = TM.ChoiceID;";
             ResultSet resultSet = statement.executeQuery(query);
-            
+            int count = 0;
             // already present?
-            if (resultSet.next()) {
-                int count = resultSet.getInt("memberCount");
-                resultSet.close();
-                return count;
-                
+            while (resultSet.next()) {
+                count++;
             }
             
             resultSet.close();
             statement.close();
-            return -1;
+            return count;
 
         } catch (Exception e) {
             throw new Exception("Failed to get choice: " + e.getMessage());
         }
 	}
     
-    public List<Alternative> getChoiceAlternatives(int ID) throws Exception {
-    	List<Alternative> alternatives = new ArrayList<>();
+    /**
+     * Gets a list of alternatives for a given choice
+     * @param ID The choiceID
+     * @return A list of alternatives associated with the choice
+     * @throws Exception
+     */
+    public List<Alternative> getChoiceAlternatives(String ID) throws Exception {
+    	List<Alternative> alternatives = new ArrayList<Alternative>();
         try {
             Statement statement = conn.createStatement();
             String query = "SELECT * FROM Alternative A JOIN Choice C ON C.choiceID = A.choiceID WHERE A.choiceID = " + ID + ";";
@@ -116,13 +135,18 @@ public class ChoiceDAO {
     }
     
 
-    
+    /**
+     * Takes in a resultSet and turns it into a choice
+     * @param resultSet the resultSet
+     * @return A choice representation of the resultSet
+     * @throws Exception
+     */
     public static Choice generateChoice(ResultSet resultSet) throws Exception {
-        int ID  = resultSet.getInt("choiceID");
+        String ID  = resultSet.getString("choiceID");
         String name = resultSet.getString("name_str");
         String description = resultSet.getString("description_str");
         int maxMembers = resultSet.getInt("max_members");
-        Date date = resultSet.getDate("date_completed");
+        Date date = resultSet.getDate("date_created");
         
         return new Choice (ID, name, description, maxMembers, date);
     }

@@ -1,21 +1,28 @@
 package wpi.xojo.g2.project.model;
 
+import java.util.UUID;
+
 public class Alternative {
-	public final int alternativeID;
-	public final int choiceID;
+	public final String alternativeID;
+	public final String choiceID;
+	public final String name;
 	public final String description;
-	public boolean selected;
+	public final boolean selected;
 	
-	public Alternative(int ID, int choiceID, String desc, boolean selected) {
+	public Alternative(String ID, String choiceID, String name, String desc, boolean selected) {
 		this.alternativeID = ID;
 		this.choiceID = choiceID;
+		this.name = name;
 		this.description = desc;
 		this.selected = selected;
 	}
 	
-	public Alternative(int ID, int choiceID, String desc) {
-		this.alternativeID = ID;
+	
+	public Alternative(String choiceID, String name, String desc) {
+		String id = UUID.randomUUID().toString();
+		this.alternativeID = id;
 		this.choiceID = choiceID;
+		this.name = name;
 		this.description = desc;
 		this.selected = false;
 	}
@@ -25,7 +32,7 @@ public class Alternative {
 		
 		if (o instanceof Alternative) {
 			Alternative other = (Alternative) o;
-			return alternativeID == other.alternativeID;
+			return alternativeID.equals(other.alternativeID);
 		}
 		
 		return false;

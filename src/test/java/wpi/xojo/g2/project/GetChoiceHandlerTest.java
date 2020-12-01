@@ -1,7 +1,5 @@
 package wpi.xojo.g2.project;
 
-import static org.junit.Assert.*;
-
 import org.junit.Assert;
 import java.io.IOException;
 import org.junit.Test;
@@ -23,7 +21,7 @@ public class GetChoiceHandlerTest extends LambdaTest {
 	}
 	@Test
 	public void testGet() {
-		GetChoiceRequest ccr = new GetChoiceRequest(2);
+		GetChoiceRequest ccr = new GetChoiceRequest("a667170f-ee95-48ac-8ee4-45a3560f672f");
 		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
 		
 		try {

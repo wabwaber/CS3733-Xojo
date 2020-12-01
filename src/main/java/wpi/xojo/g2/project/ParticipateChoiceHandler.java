@@ -15,10 +15,10 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 	
 	LambdaLogger logger;
 	
-	TeamMember createGetMember(int ID, String name, int choiceID, String pass) throws Exception {
+	TeamMember createGetMember(String choiceID, String name, String pass) throws Exception {
 		TeamMemberDAO dao = new TeamMemberDAO();
 		TeamMember exists = dao.getMember(name, choiceID);
-		TeamMember member = new TeamMember(ID, name, choiceID, pass);
+		TeamMember member = new TeamMember(choiceID, name, pass);
 		boolean correctPass = (exists != null && exists.password.equals(pass));
 		if (exists == null) {
 			dao.addMember(member);
@@ -30,7 +30,7 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		}
 	}
 	
-	int getChoiceMax(int ID) throws Exception {
+	int getChoiceMax(String ID) throws Exception {
 		ChoiceDAO dao = new ChoiceDAO();
 		Choice choice = dao.getChoice(ID);
 		if (choice == null) {
@@ -40,7 +40,7 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		}
 	}
 	
-	int getChoiceMemberCount(int ID) throws Exception {
+	int getChoiceMemberCount(String ID) throws Exception {
 		ChoiceDAO dao = new ChoiceDAO();
 		Choice choice = dao.getChoice(ID);
 		if (choice == null) {
@@ -59,8 +59,7 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		
 		ParticipateChoiceResponce response;
 		try {
-			int randID = (int) (Math.random() * 1000000000);
-			TeamMember member = createGetMember(randID, req.name, req.choiceID, req.password);
+			TeamMember member = createGetMember(req.choiceID, req.name, req.password);
 			if (member != null) {
 				response = new ParticipateChoiceResponce(member);
 			} else {

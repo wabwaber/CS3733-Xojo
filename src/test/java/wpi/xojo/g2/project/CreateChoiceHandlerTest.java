@@ -22,8 +22,7 @@ public class CreateChoiceHandlerTest extends LambdaTest {
 	@Test
 	public void testCreate() {
 		
-		int rndID = (int) (10000000 * Math.random());
-		CreateChoiceRequest ccr = new CreateChoiceRequest(rndID, "test name", "test desc", 4);
+		CreateChoiceRequest ccr = new CreateChoiceRequest("test name", "test desc", 4);
 		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
 		
 		try {

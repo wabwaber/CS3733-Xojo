@@ -18,12 +18,12 @@ public class TeamMemberDAO {
     		conn = null;
     	}
     }
-    public TeamMember getMember(String name, int choiceID) throws Exception {
+    public TeamMember getMember(String name, String choiceID) throws Exception {
     	try {
             TeamMember member = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name_str = ? and choiceID = ?;");
             ps.setString(1,  name);
-            ps.setInt(2, choiceID);
+            ps.setString(2, choiceID);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
@@ -42,8 +42,9 @@ public class TeamMemberDAO {
     
     public boolean addMember(TeamMember member) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberID = ?;");
-            ps.setInt(1, member.memberID);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE name_str = ? and choiceID = ;");
+            ps.setString(1, member.name);
+            ps.setString(2, member.choiceID);
             ResultSet resultSet = ps.executeQuery();
             
             // already present?
@@ -54,10 +55,10 @@ public class TeamMemberDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,name_str,choiceID,password_str) values(?,?,?,?);");
-            ps.setInt(1, member.memberID);
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,choiceID,name_str,password_str) values(?,?,?,?);");
+            ps.setString(1, member.memberID);
+            ps.setString(3, member.choiceID);
             ps.setString(2, member.name);
-            ps.setInt(3, member.choiceID);
             ps.setString(4, member.password);
             ps.execute();
             return true;
@@ -68,11 +69,11 @@ public class TeamMemberDAO {
     }
     
     public static TeamMember generateMember(ResultSet resultSet) throws Exception {
-    	int ID  = resultSet.getInt("memberID");
+    	String ID  = resultSet.getString("memberID");
         String name = resultSet.getString("name_Str");
-        int choiceID = resultSet.getInt("choiceID");
+        String choiceID = resultSet.getString("choiceID");
         String password = resultSet.getString("password_str");
         
-        return new TeamMember(ID, name, choiceID, password);
+        return new TeamMember(ID, choiceID, name, password);
     }
 }

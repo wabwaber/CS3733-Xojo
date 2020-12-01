@@ -13,7 +13,7 @@ public class GetChoiceHandler implements RequestHandler<GetChoiceRequest,GetChoi
 	
 	public LambdaLogger logger;
 
-	public Choice getChoice(int ID) throws Exception {
+	public Choice getChoice(String ID) throws Exception {
 		ChoiceDAO dao = new ChoiceDAO();
 		return dao.getChoice(ID);
 	}
