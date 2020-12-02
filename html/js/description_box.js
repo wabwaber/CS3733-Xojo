@@ -17,7 +17,6 @@ class DescriptionBox extends React.Component {
     }
 }
 
-// Find all DOM containers, and render Like buttons into them.
 document.querySelectorAll('.description_box')
   .forEach(domContainer => {
     // Read the comment ID from a data-* attribute.
