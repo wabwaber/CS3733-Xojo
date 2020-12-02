@@ -31,6 +31,7 @@ class AltList extends React.Component {
             for (const alt of js["list"]) {
                 console.log(alt["description"]);
                 alt_str = alt_str + "\n\n " + i + ". " + alt["description"];
+                i = i + 1;
             }
 
         } else {
