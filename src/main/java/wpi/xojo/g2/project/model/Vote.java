@@ -3,9 +3,9 @@ package wpi.xojo.g2.project.model;
 public class Vote {
 	public final String alternativeID;
 	public final String memberID;
-	public final boolean isUpvote;
+	public final Boolean isUpvote;
 	
-	public Vote(String alternativeID, String memberID, boolean isUpvote) {
+	public Vote(String alternativeID, String memberID, Boolean isUpvote) {
 		this.alternativeID = alternativeID;
 		this.memberID = memberID;
 		this.isUpvote = isUpvote;
