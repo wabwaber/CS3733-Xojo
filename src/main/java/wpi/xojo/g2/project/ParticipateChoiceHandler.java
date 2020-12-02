@@ -20,8 +20,7 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		TeamMember exists = dao.getMember(name, choiceID);
 		TeamMember member = new TeamMember(choiceID, name, pass);
 		boolean correctPass = (exists != null && exists.password.equals(pass));
-		if (exists == null) {
-			dao.addMember(member);
+		if (exists == null && dao.addMember(member)) {
 			return member;
 		} else if (correctPass) {
 			return exists;
@@ -30,26 +29,6 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		}
 	}
 	
-	int getChoiceMax(String ID) throws Exception {
-		ChoiceDAO dao = new ChoiceDAO();
-		Choice choice = dao.getChoice(ID);
-		if (choice == null) {
-			return -1;
-		} else {
-			return choice.maxMembers;
-		}
-	}
-	
-	int getChoiceMemberCount(String ID) throws Exception {
-		ChoiceDAO dao = new ChoiceDAO();
-		Choice choice = dao.getChoice(ID);
-		if (choice == null) {
-			return -1;
-		} else {
-			int count = dao.getMemberCount(ID);
-			return count;
-		}
-	}
 	
 	@Override
 	public ParticipateChoiceResponce handleRequest(ParticipateChoiceRequest req, Context context) {
@@ -63,7 +42,7 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 			if (member != null) {
 				response = new ParticipateChoiceResponce(member);
 			} else {
-				response = new ParticipateChoiceResponce("Wrong password", 401);
+				response = new ParticipateChoiceResponce("Wrong password or choice full", 400);
 			}
 			
 		} catch (Exception e) {

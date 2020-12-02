@@ -2,6 +2,8 @@ package wpi.xojo.g2.project.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import wpi.xojo.g2.project.model.TeamMember;
 
@@ -42,7 +44,7 @@ public class MemberDAO {
     
     public boolean addMember(TeamMember member) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberName = ? and choiceID = ;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberName = ? and choiceID = ?;");
             ps.setString(1, member.name);
             ps.setString(2, member.choiceID);
             ResultSet resultSet = ps.executeQuery();
@@ -54,6 +56,10 @@ public class MemberDAO {
             }
             
             resultSet.close();
+            
+            if (countCurrMembers(member.choiceID) >= getMaxMembers(member.choiceID)) {
+            	return false;
+            }
 
             ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,choiceID,memberName,memberPass) values(?,?,?,?);");
             ps.setString(1, member.memberID);
@@ -66,6 +72,48 @@ public class MemberDAO {
         } catch (Exception e) {
             throw new Exception("Failed to insert choice: " + e.getMessage());
         }
+    }
+    
+    public int countCurrMembers(String choiceID) throws Exception {
+    	try {
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice C join TeamMember TM on C.choiceID = TM.ChoiceID WHERE C.choiceID = ?;");
+			ps.setString(1, choiceID);
+		    ResultSet resultSet = ps.executeQuery();
+		    int count = 0;
+		    
+		    while (resultSet.next()) {
+		        count++;
+		    }
+		    
+		    resultSet.close();
+		    ps.close();
+		    return count;
+		    
+    	} catch (Exception e) {
+    		throw new Exception("Failed to count current members: " + e.getMessage());
+    	}
+    }
+    
+    public int getMaxMembers(String choiceID) throws Exception {
+    	try {
+    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE choiceID = ?;");
+			ps.setString(1, choiceID);
+		    ResultSet resultSet = ps.executeQuery();
+		    
+		    // already present?
+		    if (resultSet.next()) {
+		    	int max = resultSet.getInt("maxMembers");
+		    	resultSet.close();
+			    ps.close();
+		        return max;
+		    }
+		    
+		    resultSet.close();
+		    ps.close();
+		    return -1;
+    	} catch (Exception e) {
+    		throw new Exception("Failed to count current members: " + e.getMessage());
+    	}
     }
     
     public static TeamMember generateMember(ResultSet resultSet) throws Exception {

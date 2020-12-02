@@ -82,31 +82,6 @@ public class ChoiceDAO {
         }
     }
     
-    /**
-     * Gets the amount of members currently in a choice
-     * @param ID The choiceID
-     * @return the number of members currently in a choice
-     * @throws Exception
-     */
-    public int getMemberCount(String ID) throws Exception {
-    	try {
-    		Statement statement = conn.createStatement();
-            String query = "SELECT * memberCount FROM Choice C join TeamMember TM on C.choiceID = TM.ChoiceID;";
-            ResultSet resultSet = statement.executeQuery(query);
-            int count = 0;
-            // already present?
-            while (resultSet.next()) {
-                count++;
-            }
-            
-            resultSet.close();
-            statement.close();
-            return count;
-
-        } catch (Exception e) {
-            throw new Exception("Failed to get choice: " + e.getMessage());
-        }
-	}
     
     /**
      * Gets a list of alternatives for a given choice
