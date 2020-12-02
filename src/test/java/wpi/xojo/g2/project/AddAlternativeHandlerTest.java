@@ -12,7 +12,6 @@ import wpi.xojo.g2.project.http.AddAlternativeResponse;
 
 public class AddAlternativeHandlerTest extends LambdaTest {
 
-	
 	void testSuccessInput(String incoming) throws IOException {
 		AddAlternativeHandler handler = new AddAlternativeHandler();
 		AddAlternativeRequest req = new Gson().fromJson(incoming, AddAlternativeRequest.class);

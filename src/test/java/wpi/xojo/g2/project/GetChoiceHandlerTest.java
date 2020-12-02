@@ -19,6 +19,7 @@ public class GetChoiceHandlerTest extends LambdaTest {
 		GetChoiceResponse resp = handler.handleRequest(req, createContext("create"));
 		Assert.assertEquals(200, resp.httpCode);
 	}
+	
 	@Test
 	public void testGet() {
 		GetChoiceRequest ccr = new GetChoiceRequest("a667170f-ee95-48ac-8ee4-45a3560f672f");
