@@ -27,7 +27,6 @@ class Button extends React.Component {
   }
 }
 
-// Find all DOM containers, and render Like buttons into them.
 document.querySelectorAll('.button')
   .forEach(domContainer => {
     // Read the comment ID from a data-* attribute.

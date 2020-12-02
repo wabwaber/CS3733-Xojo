@@ -45,7 +45,6 @@ class ChoiceList extends React.Component {
   }
 }
 
-// Find all DOM containers, and render Like buttons into them.
 document.querySelectorAll('.choice_list')
   .forEach(domContainer => {
     // Read the comment ID from a data-* attribute.

@@ -37,7 +37,6 @@ class DeleteCtrl extends React.Component {
   }
 }
 
-// Find all DOM containers, and render Like buttons into them.
 document.querySelectorAll('.del_ctrl')
   .forEach(domContainer => {
     // Read the comment ID from a data-* attribute.
