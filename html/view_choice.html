@@ -10,14 +10,14 @@
 
         <div style="width: 100%; overflow: hidden;">
             <div class="choice_div" style="width: 500px; float: left;">
-                <div class="choice"></div>
+                <div class="choice">Loading Choice...</div>
 
             </div>
 
             <div class="alt_div" style="margin-left: 520px;">
                 <h2>Alternatives</h2>
 
-                <div class="alt_list" style="white-space: pre-line"></div>
+                <div class="alt_list" style="white-space: pre-line">Loading alternatives</div>
             </div>
         </div>
         
@@ -28,15 +28,17 @@
         <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
         <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js" crossorigin></script>
 
         <!-- Load React components. -->
-        <script src="../js/button.js"></script>
-        <script src="../js/description_box.js"></script>
-        <script src="../js/text_box.js"></script>
-        <script src="../js/api.js"></script>
-        <script src="../js/choice.js"></script>
-        <script src="../js/alt_list.js"></script>
-        <script src="../js/share_choice.js"></script>
+        <script src="js/button.js"></script>
+        <script src="js/description_box.js"></script>
+        <script src="js/text_box.js"></script>
+        <script src="js/api.js"></script>
+        <script src="js/choice.js"></script>
+        <script src="js/alternative.js" type="text/babel"></script>
+        <script src="js/alt_list.js" type="text/babel"></script>
+        <script src="js/share_choice.js"></script>
 
 
     </body>

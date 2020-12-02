@@ -1,27 +1,24 @@
 'use strict';
 
-class Choice extends React.Component {
+class AltList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = { alternatives: [] };
   }
-
 
   render() {
     var data = {};
-    var choice_name = "";
-    var choice_desc = "";
+    var alt_str;
 
     const urlParams = new URLSearchParams(window.location.search);
+    console.log(urlParams.get('id'));
     data["choiceID"] = urlParams.get('id');
 
     var js = JSON.stringify(data);
     console.log("JS:" + js);
 
-    choice_name = "Test Choice";
-    choice_desc = "Test desc";
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", get_choice_url, false);
+    xhr.open("POST", list_alt_url, false);
     xhr.send(js);
 
     console.log(xhr);
@@ -30,9 +27,21 @@ class Choice extends React.Component {
             var js = JSON.parse(xhr.responseText);
             console.log("XHR:" + xhr.responseText);
             console.log(js["list"]);
+            var i = 0;
+            
+            for (const alt of js["list"]) {
+                console.log("Val of i: " + i);
+                console.log(alt["description"]);
+                this.state.alternatives.push(React.createElement(Alternative, 
+                    {id: alt["alternativeID"], 
+                    description: alt["description"],
+                    vote: 0,
+                    feedback: [],
+                    key: i
+                }))
+                i++;
+            }
 
-            choice_name = js["choice"]["name"];
-            choice_desc = js["choice"]["description"];
         } else {
             console.log("actual:" + xhr.responseText)
             var js = JSON.parse(xhr.responseText);
@@ -45,27 +54,18 @@ class Choice extends React.Component {
     return React.createElement(
         'div',
         { },
-        React.createElement(
-            'h2',
-            {},
-            'Choice: ' + choice_name
-        ),
-        React.createElement(
-            'p',
-            {},
-            'Description: ' + choice_desc
-        )
+        //'Alternatives:' + alt_str
+        this.state.alternatives
     );
   }
 }
 
-// Find all DOM containers, and render Like buttons into them.
-document.querySelectorAll('.choice')
+document.querySelectorAll('.alt_list')
   .forEach(domContainer => {
     // Read the comment ID from a data-* attribute.
     const commentID = domContainer.dataset.commentid;
     ReactDOM.render(
-      React.createElement(Choice, { commentID: commentID }),
+      React.createElement(AltList, { commentID: commentID }),
       domContainer
     );
   });

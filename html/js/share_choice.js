@@ -18,7 +18,6 @@ class ShareChoice extends React.Component {
     }
 }
 
-// Find all DOM containers, and render Like buttons into them.
 document.querySelectorAll('.share_choice')
   .forEach(domContainer => {
     // Read the comment ID from a data-* attribute.
