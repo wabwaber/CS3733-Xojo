@@ -15,18 +15,24 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 	
 	LambdaLogger logger;
 	
-	TeamMember createGetMember(String choiceID, String name, String pass) throws Exception {
+	TeamMember getMember(String choiceID, String name, String pass) throws Exception {
+		MemberDAO dao = new MemberDAO();
+		TeamMember member = dao.getMember(name, choiceID);
+		boolean correctPass = (member != null && member.password.equals(pass));
+		if (correctPass) {
+			return member;
+		}
+		return null;
+	}
+	
+	TeamMember createMember(String choiceID, String name, String pass) throws Exception {
 		MemberDAO dao = new MemberDAO();
 		TeamMember exists = dao.getMember(name, choiceID);
 		TeamMember member = new TeamMember(choiceID, name, pass);
-		boolean correctPass = (exists != null && exists.password.equals(pass));
 		if (exists == null && dao.addMember(member)) {
 			return member;
-		} else if (correctPass) {
-			return exists;
-		} else {
-			return null;
 		}
+		return null;
 	}
 	
 	
@@ -38,11 +44,16 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 		
 		ParticipateChoiceResponce response;
 		try {
-			TeamMember member = createGetMember(req.choiceID, req.name, req.password);
+			TeamMember member = getMember(req.choiceID, req.name, req.password);
 			if (member != null) {
-				response = new ParticipateChoiceResponce(member);
+				response = new ParticipateChoiceResponce(member, false);
 			} else {
-				response = new ParticipateChoiceResponce("Wrong password or choice full", 400);
+				member = createMember(req.choiceID, req.name, req.password);
+				if (member != null) {
+					response = new ParticipateChoiceResponce(member, true);
+				} else {
+					response = new ParticipateChoiceResponce("Wrong password or choice full", 400);
+				}
 			}
 			
 		} catch (Exception e) {

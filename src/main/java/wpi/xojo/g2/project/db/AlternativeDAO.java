@@ -68,7 +68,7 @@ public class AlternativeDAO {
 	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
 		String ID  = resultSet.getString("alternativeID");
         String choiceID = resultSet.getString("choiceID");
-        String description = resultSet.getString("description_str");
+        String description = resultSet.getString("alternativeDesc");
         boolean selected = resultSet.getBoolean("selected");
         
         return new Alternative(ID, choiceID, description, selected);

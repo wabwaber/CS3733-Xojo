@@ -92,16 +92,16 @@ public class ChoiceDAO {
     public List<Alternative> getChoiceAlternatives(String ID) throws Exception {
     	List<Alternative> alternatives = new ArrayList<Alternative>();
         try {
-            Statement statement = conn.createStatement();
-            String query = "SELECT * FROM Alternative A JOIN Choice C ON C.choiceID = A.choiceID WHERE A.choiceID = " + ID + ";";
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative A JOIN Choice C ON C.choiceID = A.choiceID WHERE A.choiceID = ?;");
+            ps.setString(1, ID);
+            ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
             	Alternative c = AlternativeDAO.generateAlternative(resultSet);
             	alternatives.add(c);
             }
             resultSet.close();
-            statement.close();
+            ps.close();
             return alternatives;
 
         } catch (Exception e) {
