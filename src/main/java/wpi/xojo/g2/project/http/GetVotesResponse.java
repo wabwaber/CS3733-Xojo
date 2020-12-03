@@ -24,4 +24,6 @@ public class GetVotesResponse {
 		this.error = "";
 		this.httpCode = 200;
 	}
+	
+	
 }

@@ -6,7 +6,7 @@ public class CreateChoiceRequest {
 	public int maxMembers;
 	
 	public String toString() {
-		return "Choice name:" + choiceName;
+		return "Choice name: " + choiceName;
 	}
 	
 	public CreateChoiceRequest(String choiceName, String choiceDesc, int maxMembers) {

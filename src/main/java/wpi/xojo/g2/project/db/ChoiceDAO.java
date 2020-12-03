@@ -92,13 +92,13 @@ public class ChoiceDAO {
     public List<Alternative> getChoiceAlternatives(String ID) throws Exception {
     	List<Alternative> alternatives = new ArrayList<Alternative>();
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative A JOIN Choice C ON C.choiceID = A.choiceID WHERE A.choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative WHERE choiceID = ?;");
             ps.setString(1, ID);
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-            	Alternative c = AlternativeDAO.generateAlternative(resultSet);
-            	alternatives.add(c);
+            	Alternative a = AlternativeDAO.generateAlternative(resultSet);
+            	alternatives.add(a);
             }
             resultSet.close();
             ps.close();
@@ -107,6 +107,25 @@ public class ChoiceDAO {
         } catch (Exception e) {
             throw new Exception("Failed in getting alternatives: " + e.getMessage());
         }
+    }
+    
+    public List<Choice> getAllChoices() throws Exception {
+    	List<Choice> choices = new ArrayList<Choice>();
+    	try {
+    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice;");
+    		ResultSet resultSet = ps.executeQuery();
+    		
+    		while (resultSet.next()) {
+    			Choice c = ChoiceDAO.generateChoice(resultSet);
+    			choices.add(c);
+    		}
+    		
+    		resultSet.close();
+            ps.close();
+            return choices;
+    	} catch (Exception e) {
+            throw new Exception("Failed in getting all choices: " + e.getMessage());
+    	}
     }
     
 

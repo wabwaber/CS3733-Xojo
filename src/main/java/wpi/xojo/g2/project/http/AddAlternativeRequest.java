@@ -5,7 +5,7 @@ public class AddAlternativeRequest {
 	public String alternativeDesc;
 	
 	public String toString() {
-		return "Alternative Desc:" + alternativeDesc;
+		return "Alternative Desc: " + alternativeDesc;
 	}
 	
 	

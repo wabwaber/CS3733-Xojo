@@ -6,7 +6,7 @@ public class ChangeVoteRequest {
 	public Boolean isUpvote;
 	
 	public String toString() {
-		return "Change vote to:" + isUpvote;
+		return "Change vote to: " + isUpvote;
 	}
 	
 	

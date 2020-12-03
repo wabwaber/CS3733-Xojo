@@ -2,8 +2,11 @@ package wpi.xojo.g2.project.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import wpi.xojo.g2.project.model.Alternative;
+import wpi.xojo.g2.project.model.Vote;
 
 public class AlternativeDAO {
 	java.sql.Connection conn;
@@ -65,6 +68,26 @@ public class AlternativeDAO {
 		}
 	}
 	
+	public List<Vote> getAlternativeVotes(String ID, boolean isUpvote) throws Exception {
+		List<Vote> votes = new ArrayList<Vote>();
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Vote WHERE alternativeID = ? AND isUpvote = ?;");
+            ps.setString(1, ID);
+            ps.setBoolean(2, isUpvote);
+            ResultSet resultSet = ps.executeQuery();
+            
+            while (resultSet.next()) {
+            	Vote v = VoteDAO.generateVote(resultSet);
+            	votes.add(v);
+            }
+            resultSet.close();
+            ps.close();
+            return votes;
+		} catch (Exception e) {
+            throw new Exception("Failed in getting votes: " + e.getMessage());
+			
+		}
+	}
 	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
 		String ID  = resultSet.getString("alternativeID");
         String choiceID = resultSet.getString("choiceID");
