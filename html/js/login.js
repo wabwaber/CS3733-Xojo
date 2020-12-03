@@ -61,7 +61,6 @@ function request_login() {
                                     console.log(voting_xhr);
                                     console.log("Registered");
                                 }
-                                alert("first time");
                             } else {
                                 alert("Something went wrong.");
                                 return;

@@ -11,6 +11,9 @@ class Alternative extends React.Component {
         super(props);
         this.state = { id: props.id, description: props.description, 
             vote: props.vote, feedback: props.feedback, key: props.key};
+        const urlParams = new URLSearchParams(window.location.search);
+        this.choice_id = urlParams.get('id');
+        this.member_id = urlParams.get('memberid');
     }
 
     upvote() {
@@ -22,14 +25,18 @@ class Alternative extends React.Component {
 
             // Update page state
             document.getElementById('upvote'+this.state.id).src = emptyUpvoteUrl;
-            this.state.vote = 0;
 
             // Send vote update XHR
+            this.log_vote(null);
+            this.state.vote = 0;
+
         } else {
 
             // Update page state
             document.getElementById('upvote'+this.state.id).src = fullUpvoteUrl;
             document.getElementById('downvote'+this.state.id).src = emptyDownvoteUrl;
+
+            this.log_vote(true);
             this.state.vote = 1;
         }
     }
@@ -43,13 +50,64 @@ class Alternative extends React.Component {
 
             // Update page state
             document.getElementById('downvote'+this.state.id).src = emptyDownvoteUrl;
-            this.state.vote = 0;
 
             // Send vote update XHR
+            this.log_vote(null);
+            this.state.vote = 0;
+
         } else {
             document.getElementById('downvote'+this.state.id).src = fullDownvoteUrl;
             document.getElementById('upvote'+this.state.id).src = emptyUpvoteUrl;
+
+            this.log_vote(false);
             this.state.vote = -1;
+        }
+    }
+
+    log_vote(vote) {
+        var data = {};
+        data["alternativeID"] = this.state.id;
+        data["memberID"] = this.member_id;
+        data["isUpvote"] = vote;
+
+        var self = this;
+        var last_vote = self.state.vote;
+
+        var js = JSON.stringify(data);
+        console.log("JS:" + js);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", change_vote_url, true);
+
+        xhr.send(js);
+
+        xhr.onloadend = function () {
+            console.log(xhr);
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+
+                // Good response
+                if (xhr.status == 200) {
+                    var js = JSON.parse(xhr.responseText);
+
+                    if (js["httpCode"] == 200) {
+                        console.log("Vote successfully logged");
+                    } else {
+
+                        // Vote not logged, reset to former state
+                        if (last_vote == 1) {
+                            document.getElementById('upvote'+self.state.id).src = fullUpvoteUrl;
+                            document.getElementById('downvote'+self.state.id).src = emptyDownvoteUrl;
+                        } else if (last_vote == 0) {
+                            document.getElementById('downvote'+self.state.id).src = emptyDownvoteUrl;
+                            document.getElementById('upvote'+self.state.id).src = emptyUpvoteUrl;
+                        } else {
+                            document.getElementById('downvote'+self.state.id).src = fullDownvoteUrl;
+                            document.getElementById('upvote'+self.state.id).src = emptyUpvoteUrl;
+                        }
+
+                        self.state.vote = last_vote;
+                    }
+                }
+            }
         }
     }
 
