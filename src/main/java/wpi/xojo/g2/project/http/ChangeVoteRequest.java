@@ -5,6 +5,11 @@ public class ChangeVoteRequest {
 	public String memberID;
 	public Boolean isUpvote;
 	
+	public String toString() {
+		return "Change vote to:" + isUpvote;
+	}
+	
+	
 	public ChangeVoteRequest(String alternativeID, String memberID, Boolean isUpvote) {
 		this.alternativeID = alternativeID;
 		this.memberID = memberID;
