@@ -13,4 +13,11 @@ public class SetVotesResponse {
 		this.error = "";
 		this.httpCode = code;
 	}
+	
+	public String toString() {
+		if (httpCode == 200) {
+			return "Response(success)";
+		}
+		return "Error :" + error;
+	}
 }

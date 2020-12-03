@@ -1,7 +1,8 @@
 package wpi.xojo.g2.project;
 
-import org.junit.Assert;
 import java.io.IOException;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.gson.Gson;

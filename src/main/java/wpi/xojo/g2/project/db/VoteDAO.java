@@ -70,8 +70,9 @@ public class VoteDAO {
         }
     }
     
-    public boolean changeVote(String alternativeID, String memberID, Boolean isUpvote) throws Exception {
+    public Vote changeVote(String alternativeID, String memberID, Boolean isUpvote) throws Exception {
     	try {
+    		Vote vote = null;
     		PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ? and memberID = ?;");
             ps.setString(1, alternativeID);
             ps.setString(2, memberID);
@@ -79,15 +80,18 @@ public class VoteDAO {
             
             if (resultSet.next()) {
             	ps.close();
-            	ps = conn.prepareStatement("UPDATE " + tblName + " SET isUpvote = ? WHERE alternativeID = ? and memberID = ?;");
-            	ps.setBoolean(1, isUpvote);
+            	ps = conn.prepareStatement("UPDATE " + tblName + " SET isUpvote = ? WHERE alternativeID = ? AND memberID = ?;");
+            	ps.setObject(1, isUpvote);
             	ps.setString(2, alternativeID);
                 ps.setString(3, memberID);
-                return true;
+                ps.executeUpdate();
+                vote = new Vote(alternativeID, memberID, isUpvote);
             }
             
+            resultSet.close();
             ps.close();
-            return false;
+            return vote;
+            
     	} catch (Exception e) {
             throw new Exception("Failed to update vote: " + e.getMessage());
         }
