@@ -76,7 +76,7 @@ public class MemberDAO {
     
     public int countCurrMembers(String choiceID) throws Exception {
     	try {
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice C join TeamMember TM on C.choiceID = TM.ChoiceID WHERE C.choiceID = ?;");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember choiceID = ?;");
 			ps.setString(1, choiceID);
 		    ResultSet resultSet = ps.executeQuery();
 		    int count = 0;

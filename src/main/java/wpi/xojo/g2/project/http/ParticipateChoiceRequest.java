@@ -5,6 +5,11 @@ public class ParticipateChoiceRequest {
 	public String name;
 	public String password;
 	
+	public String toString() {
+		return "Participating choice:" + name;
+	}
+	
+	
 	public ParticipateChoiceRequest(String choiceID, String name, String password) {
 		this.choiceID = choiceID;
 		this.name = name;
