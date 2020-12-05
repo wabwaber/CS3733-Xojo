@@ -10,7 +10,8 @@ class Alternative extends React.Component {
     constructor(props) {
         super(props);
         this.state = { id: props.id, description: props.description, 
-            vote: props.vote, feedback: props.feedback, key: props.key};
+            vote: props.vote, approvals: props.approvals, disapprovals: props.disapprovals,
+            feedback: props.feedback, key: props.key };
         const urlParams = new URLSearchParams(window.location.search);
         this.choice_id = urlParams.get('id');
         this.member_id = urlParams.get('memberid');
@@ -118,12 +119,7 @@ class Alternative extends React.Component {
 
     render() {
         // Construct the alternative box
-        console.log(this.state.id);
-        console.log(this.state.description);
-        console.log(this.state.vote);
-        console.log(this.state.feedback);
-        console.log(this.state.key);
-        // this.state.description = "A short description";
+
         this.state.vote = 0;
         this.state.feedback = [["Joe Smith", "Some feedback"], ["Jack Smith", "Other Feedback"]];
         return (
@@ -143,6 +139,14 @@ class Alternative extends React.Component {
                 </div>
                 <div className="feedback" style={{margin: "5px", width: "100%", float: "left"}}>
                     <FeedbackList feedback={this.state.feedback}/>
+                </div>
+                <div className="votes" style={{margin: "5px", width: "100%", float: "left"}}>
+                    <div className="approvals">
+                        <VoteList isUpvote={true} members={this.state.approvals} this_member={this.member_id}/>
+                    </div>
+                    <div className="disapprovals">
+                        <VoteList isUpvote={false} members={this.state.disapprovals} this_member={this.member_id}/>
+                    </div>
                 </div>
                 <div className="add_feedback" style={{width: "100%", float: "left"}}>
                     <button onClick={() => this.addFeedback()}>Add Feedback</button>
@@ -169,6 +173,33 @@ class FeedbackList extends React.Component {
             </div>
         )
     }
+}
+
+class VoteList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { isUpvote: props.isUpvote, members: props.members, current_member: props.this_member };
+    }
+
+    render() {
+        if (this.state.members) {
+            const vote_element = this.state.members.map((member) =>
+                <div style={{display: (member.memberID != this.state.current_member ? "block" : "none")}}>
+                    <img src={this.state.isUpvote ? fullUpvoteUrl : fullDownvoteUrl} style={{width: "30px", height: "30px", display: "inline"}}/>
+                    <p style={{display: "inline"}}>{member.memberID}</p> 
+                </div>
+            );
+
+            return (
+                <div className="vote_list">
+                    {vote_element}
+                </div>
+            )
+        } else {
+            return null;
+        }
+    }
+
 }
 
 document.querySelectorAll('.alternative')

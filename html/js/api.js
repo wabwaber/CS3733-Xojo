@@ -7,4 +7,5 @@ var list_alt_url = base_url + "https://y77z5fzyb1.execute-api.us-east-2.amazonaw
 var get_choice_url = base_url + "https://mpic0e5zcl.execute-api.us-east-2.amazonaws.com/default/GetChoice";
 var set_vote_url = base_url + "https://08zq4xrt56.execute-api.us-east-2.amazonaws.com/default/SetVotes";
 var change_vote_url = base_url + "https://o3h8rvze7i.execute-api.us-east-2.amazonaws.com/default/ChangeVote";
+var get_votes_url = base_url + "https://rn96a73fjb.execute-api.us-east-2.amazonaws.com/default/GetVotes";
 
