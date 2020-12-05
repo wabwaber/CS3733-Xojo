@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 import wpi.xojo.g2.project.db.AlternativeDAO;
+import wpi.xojo.g2.project.db.VoteDAO;
 import wpi.xojo.g2.project.http.GetVotesRequest;
 import wpi.xojo.g2.project.http.GetVotesResponse;
 import wpi.xojo.g2.project.model.Vote;
@@ -15,8 +16,8 @@ public class GetVotesHandler implements RequestHandler<GetVotesRequest, GetVotes
 	
 	public LambdaLogger logger;
 
-	List<Vote> getVotes(String ID, boolean isUpvote) throws Exception {
-		AlternativeDAO dao = new AlternativeDAO();
+	List<String> getVotes(String ID, boolean isUpvote) throws Exception {
+		VoteDAO dao = new VoteDAO();
 		return dao.getAlternativeVotes(ID, isUpvote);
 	}
 	
@@ -28,8 +29,8 @@ public class GetVotesHandler implements RequestHandler<GetVotesRequest, GetVotes
 		GetVotesResponse response;
 		
 		try {
-			List<Vote> approvals = getVotes(req.alternativeID, true);
-			List<Vote> disapprovals = getVotes(req.alternativeID, false);
+			List<String> approvals = getVotes(req.alternativeID, true);
+			List<String> disapprovals = getVotes(req.alternativeID, false);
 			response = new GetVotesResponse(approvals, disapprovals);
 		} catch (Exception e) {
 			response = new GetVotesResponse(e.getMessage(), 403);

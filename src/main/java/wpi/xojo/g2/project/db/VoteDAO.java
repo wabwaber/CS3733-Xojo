@@ -2,6 +2,7 @@ package wpi.xojo.g2.project.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import wpi.xojo.g2.project.model.Alternative;
@@ -135,6 +136,27 @@ public class VoteDAO {
     		throw new Exception("Failed to update vote: " + e.getMessage());
     	}
     }
+    
+    public List<String> getAlternativeVotes(String ID, boolean isUpvote) throws Exception {
+		List<String> votes = new ArrayList<String>();
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT memberName FROM Vote V join TeamMember M ON V.memberID = M.MemberID WHERE alternativeID = ? AND isUpvote = ?;");
+            ps.setString(1, ID);
+            ps.setBoolean(2, isUpvote);
+            ResultSet resultSet = ps.executeQuery();
+            
+            while (resultSet.next()) {
+            	String v = resultSet.getString("memberName");
+            	votes.add(v);
+            }
+            resultSet.close();
+            ps.close();
+            return votes;
+		} catch (Exception e) {
+            throw new Exception("Failed in getting votes: " + e.getMessage());
+			
+		}
+	}
     
     public static Vote generateVote(ResultSet resultSet) throws Exception {
     	String alternativeID = resultSet.getString("alternativeID");
