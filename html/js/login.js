@@ -66,8 +66,6 @@ function request_login() {
                                 return;
                             }
                         }
-                    } else {
-                        alert("Not first time");
                     }
                     
                     // Goto view choice screen
