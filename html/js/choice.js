@@ -3,7 +3,7 @@
 class Choice extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { };
+        this.state = { id: props.id, description: props.description, creation_date: props.creation_date, choice_name: props.choice_name, choice_desc: props.choice_desc};
     }
 
 
