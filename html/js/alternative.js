@@ -192,7 +192,7 @@ class VoteList extends React.Component {
             const vote_element = this.state.members.map((member) =>
                 <div style={{display: (member.memberID != this.state.current_member ? "block" : "none")}}>
                     <img src={this.state.isUpvote ? fullUpvoteUrl : fullDownvoteUrl} style={{width: "30px", height: "30px", display: "inline"}}/>
-                    <p style={{display: "inline"}}>{member.memberID}</p> 
+                    <p style={{display: "inline"}}>{member.name}</p> 
                 </div>
             );
 
