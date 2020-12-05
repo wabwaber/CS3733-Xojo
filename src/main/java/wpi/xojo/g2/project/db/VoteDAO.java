@@ -7,6 +7,7 @@ import java.util.List;
 
 import wpi.xojo.g2.project.model.Alternative;
 import wpi.xojo.g2.project.model.Vote;
+import wpi.xojo.g2.project.model.VoteName;
 
 public class VoteDAO {
 	
@@ -137,17 +138,18 @@ public class VoteDAO {
     	}
     }
     
-    public List<String> getAlternativeVotes(String ID, boolean isUpvote) throws Exception {
-		List<String> votes = new ArrayList<String>();
+    public List<VoteName> getAlternativeVotes(String ID, boolean isUpvote) throws Exception {
+		List<VoteName> votes = new ArrayList<VoteName>();
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT memberName FROM Vote V join TeamMember M ON V.memberID = M.MemberID WHERE alternativeID = ? AND isUpvote = ?;");
+			PreparedStatement ps = conn.prepareStatement("SELECT V.memberID, memberName FROM Vote V join TeamMember M ON V.memberID = M.MemberID WHERE alternativeID = ? AND isUpvote = ?;");
             ps.setString(1, ID);
             ps.setBoolean(2, isUpvote);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
-            	String v = resultSet.getString("memberName");
-            	votes.add(v);
+            	String memberID = resultSet.getString("memberID");
+            	String name = resultSet.getString("memberName");
+            	votes.add(new VoteName(memberID, name));
             }
             resultSet.close();
             ps.close();
@@ -165,5 +167,6 @@ public class VoteDAO {
     	
     	return new Vote(alternativeID, memberID, isUpvote);
     }
+    
 
 }
