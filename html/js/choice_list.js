@@ -48,11 +48,7 @@ class ChoiceList extends React.Component {
         return React.createElement(
         'div',
         { },
-        React.createElement(
-            'div',
-            { },
-            'Choices will appear here'
-        )
+        this.state.choices
         );
     }
 }
