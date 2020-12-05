@@ -8,53 +8,23 @@ class Choice extends React.Component {
 
 
   render() {
-        var data = {};
-        var choice_name = "";
-        var choice_desc = "";
-
-        const urlParams = new URLSearchParams(window.location.search);
-        data["choiceID"] = urlParams.get('id');
-
-        var js = JSON.stringify(data);
-        console.log("JS:" + js);
-
-        choice_name = "Test Choice";
-        choice_desc = "Test desc";
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", get_choice_url, false);
-        xhr.send(js);
-
-        console.log(xhr);
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-            if (xhr.status == 200) {
-                var js = JSON.parse(xhr.responseText);
-                console.log("XHR:" + xhr.responseText);
-                console.log(js["list"]);
-
-                choice_name = js["choice"]["name"];
-                choice_desc = js["choice"]["description"];
-            } else {
-                console.log("actual:" + xhr.responseText)
-                var js = JSON.parse(xhr.responseText);
-                var err = js["response"];
-                alert (err);
-            }
-        }
-
-        console.log("Sending request");
+      var date = new Date(props.creation_date); 
+           
         return React.createElement(
-            'div',
-            { },
-            React.createElement(
-                'h2',
-                {},
-                'Choice: ' + choice_name
-            ),
-            React.createElement(
-                'p',
-                {},
-                'Description: ' + choice_desc
-            )
+            <div className="choice_box">
+                <div className="choice_name">
+                    <h2>{this.state.choice_name}</h2>
+                </div>
+                <div className="choice_id">
+                    <p>{this.state.id}</p>
+                </div>
+                <div className="choice_date">
+                    <p>{date.toString()}</p>
+                </div>
+                <div className="choice_is_completed">
+                    <p>{"not completed"}</p>
+                </div>
+            </div>
         );
     }
 }
