@@ -8,9 +8,9 @@ class Choice extends React.Component {
 
 
   render() {
-      var date = new Date(props.creation_date); 
-           
-        return React.createElement(
+        var date = new Date(this.state.creation_date); 
+
+        return (
             <div className="choice_box">
                 <div className="choice_name">
                     <h2>{this.state.choice_name}</h2>
