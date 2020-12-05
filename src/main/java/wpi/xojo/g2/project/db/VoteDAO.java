@@ -2,10 +2,12 @@ package wpi.xojo.g2.project.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import wpi.xojo.g2.project.model.Alternative;
 import wpi.xojo.g2.project.model.Vote;
+import wpi.xojo.g2.project.model.VoteName;
 
 public class VoteDAO {
 	
@@ -136,6 +138,28 @@ public class VoteDAO {
     	}
     }
     
+    public List<VoteName> getAlternativeVotes(String ID, boolean isUpvote) throws Exception {
+		List<VoteName> votes = new ArrayList<VoteName>();
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT V.memberID, memberName FROM Vote V join TeamMember M ON V.memberID = M.MemberID WHERE alternativeID = ? AND isUpvote = ?;");
+            ps.setString(1, ID);
+            ps.setBoolean(2, isUpvote);
+            ResultSet resultSet = ps.executeQuery();
+            
+            while (resultSet.next()) {
+            	String memberID = resultSet.getString("memberID");
+            	String name = resultSet.getString("memberName");
+            	votes.add(new VoteName(memberID, name));
+            }
+            resultSet.close();
+            ps.close();
+            return votes;
+		} catch (Exception e) {
+            throw new Exception("Failed in getting votes: " + e.getMessage());
+			
+		}
+	}
+    
     public static Vote generateVote(ResultSet resultSet) throws Exception {
     	String alternativeID = resultSet.getString("alternativeID");
     	String memberID = resultSet.getString("memberID");
@@ -143,5 +167,6 @@ public class VoteDAO {
     	
     	return new Vote(alternativeID, memberID, isUpvote);
     }
+    
 
 }
