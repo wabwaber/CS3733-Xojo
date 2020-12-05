@@ -34,7 +34,7 @@ class ChoiceList extends React.Component {
                 this.state.alternatives.push(React.createElement(Choice, 
                     {id: choice["choiceID"], 
                     description: choice["description"],
-                    creation_date: choice["creationDate"]
+                    creation_date: choice["dateCreated"]
                 }))
                 i++;
             }
