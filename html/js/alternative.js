@@ -150,6 +150,9 @@ class Alternative extends React.Component {
                     <div className="disapprovals">
                         <VoteList isUpvote={false} members={this.state.disapprovals} this_member={this.member_id}/>
                     </div>
+                    <div className="totals">
+                        <p>{"Approvals: " + this.state.approvals.length + " Disapprovals: " + this.state.disapprovals.length}</p>
+                    </div>
                 </div>
                 <div className="feedback" style={{margin: "5px", width: "100%", float: "left"}}>
                     <FeedbackList feedback={this.state.feedback}/>
