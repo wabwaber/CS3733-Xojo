@@ -21,7 +21,7 @@ function request_choice() {
     }
 
     // Begin XHR Request
-    if (choice_name && choice_desc) {
+    if (choice_name && choice_desc && max_members) {
         if (alternatives.length >= 2) {
             var data = {};
             data["choiceName"] = choice_name;
