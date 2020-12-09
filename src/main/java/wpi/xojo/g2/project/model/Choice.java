@@ -8,14 +8,16 @@ public class Choice {
 	public final String name;
 	public final String description;
 	public final int maxMembers;
-	public final Timestamp dateCreated;
+	public final Timestamp timeCreated;
+	public final boolean completed;
 	
-	public Choice(String ID, String name, String desc, int maxMembers, Timestamp date) {
+	public Choice(String ID, String name, String desc, int maxMembers, Timestamp date, boolean completed) {
 		this.choiceID = ID;
 		this.name = name;
 		this.description = desc;
 		this.maxMembers = maxMembers;
-		this.dateCreated = date;
+		this.timeCreated = date;
+		this.completed = completed;
 	}
 	
 	public Choice(String name, String desc, int maxMembers) {
@@ -25,7 +27,8 @@ public class Choice {
 		this.description = desc;
 		this.maxMembers = maxMembers;	
 		Timestamp d = new Timestamp(java.lang.System.currentTimeMillis());
-		this.dateCreated = d;
+		this.timeCreated = d;
+		this.completed = false;
 	}
 	
 

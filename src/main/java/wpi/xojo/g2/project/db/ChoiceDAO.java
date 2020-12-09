@@ -23,15 +23,15 @@ public class ChoiceDAO {
     
     /**
      * Gets the choice from the database
-     * @param ID the choiceID
+     * @param choiceID the choiceID
      * @return The choice with the corresponding choiceID
      * @throws Exception
      */
-    public Choice getChoice(String ID) throws Exception {
+    public Choice getChoice(String choiceID) throws Exception {
     	try {
             Choice choice = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID=?;");
-            ps.setString(1,  ID);
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
+            ps.setString(1,  choiceID);
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
@@ -68,12 +68,12 @@ public class ChoiceDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,choiceName,choiceDesc,maxMembers,dateCreated) values(?,?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,choiceName,choiceDesc,maxMembers,timeCreated) values(?,?,?,?,?);");
             ps.setString(1, choice.choiceID);
             ps.setString(2, choice.name);
             ps.setString(3, choice.description);
             ps.setInt(4, choice.maxMembers);
-            ps.setTimestamp(5, choice.dateCreated);
+            ps.setTimestamp(5, choice.timeCreated);
             ps.execute();
             return true;
 
@@ -85,15 +85,15 @@ public class ChoiceDAO {
     
     /**
      * Gets a list of alternatives for a given choice
-     * @param ID The choiceID
+     * @param choiceID The choiceID
      * @return A list of alternatives associated with the choice
      * @throws Exception
      */
-    public List<Alternative> getChoiceAlternatives(String ID) throws Exception {
+    public List<Alternative> getChoiceAlternatives(String choiceID) throws Exception {
     	List<Alternative> alternatives = new ArrayList<Alternative>();
         try {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative WHERE choiceID = ?;");
-            ps.setString(1, ID);
+            ps.setString(1, choiceID);
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
@@ -109,6 +109,11 @@ public class ChoiceDAO {
         }
     }
     
+    /**
+     * Gets all the choices created
+     * @return all the choices in tha database
+     * @throws Exception
+     */
     public List<Choice> getAllChoices() throws Exception {
     	List<Choice> choices = new ArrayList<Choice>();
     	try {
@@ -140,9 +145,10 @@ public class ChoiceDAO {
         String name = resultSet.getString("choiceName");
         String description = resultSet.getString("choiceDesc");
         int maxMembers = resultSet.getInt("maxMembers");
-        Timestamp date = resultSet.getTimestamp("dateCreated");
+        Timestamp date = resultSet.getTimestamp("timeCreated");
+        boolean completed = resultSet.getBoolean("isCompleted");
         
-        return new Choice (ID, name, description, maxMembers, date);
+        return new Choice (ID, name, description, maxMembers, date, completed);
     }
 
 }
