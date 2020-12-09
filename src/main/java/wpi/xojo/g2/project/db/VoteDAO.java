@@ -67,7 +67,7 @@ public class VoteDAO {
             return true;
             
     	} catch (Exception e) {
-            throw new Exception("Failed to insert vote: " + e.getMessage());
+            throw new Exception("Failed to add vote: " + e.getMessage());
         }
     }
     
