@@ -150,6 +150,9 @@ class Alternative extends React.Component {
                     <div className="disapprovals">
                         <VoteList isUpvote={false} members={this.state.disapprovals} this_member={this.member_id}/>
                     </div>
+                    <div className="totals">
+                        <p>{"Approvals: " + this.state.approvals.length + " Disapprovals: " + this.state.disapprovals.length}</p>
+                    </div>
                 </div>
                 <div className="feedback" style={{margin: "5px", width: "100%", float: "left"}}>
                     <FeedbackList feedback={this.state.feedback}/>
@@ -192,7 +195,7 @@ class VoteList extends React.Component {
             const vote_element = this.state.members.map((member) =>
                 <div style={{display: (member.memberID != this.state.current_member ? "block" : "none")}}>
                     <img src={this.state.isUpvote ? fullUpvoteUrl : fullDownvoteUrl} style={{width: "30px", height: "30px", display: "inline"}}/>
-                    <p style={{display: "inline"}}>{member.memberID}</p> 
+                    <p style={{display: "inline"}}>{member.name}</p> 
                 </div>
             );
 

@@ -36,10 +36,8 @@ class AltList extends React.Component {
 
     render() {
         var data = {};
-        var alt_str;
 
         const urlParams = new URLSearchParams(window.location.search);
-        console.log(urlParams.get('id'));
         data["choiceID"] = urlParams.get('id');
 
         var js = JSON.stringify(data);
@@ -54,13 +52,12 @@ class AltList extends React.Component {
             if (xhr.status == 200) {
                 var js = JSON.parse(xhr.responseText);
                 console.log("XHR:" + xhr.responseText);
-                console.log(js["list"]);
                 
                 for (const alt of js["list"]) {
                     console.log(alt["description"]);
 
                     var votes = this.get_votes(alt["alternativeID"]);
-                    console.table(votes);
+
                     // Construct list of alternatives
                     this.state.alternatives.push(React.createElement(Alternative, 
                         {id: alt["alternativeID"], 
@@ -84,7 +81,6 @@ class AltList extends React.Component {
         return React.createElement(
             'div',
             { },
-            //'Alternatives:' + alt_str
             this.state.alternatives
         );
     }
@@ -92,10 +88,8 @@ class AltList extends React.Component {
 
 document.querySelectorAll('.alt_list')
   .forEach(domContainer => {
-    // Read the comment ID from a data-* attribute.
-    const commentID = domContainer.dataset.commentid;
     ReactDOM.render(
-      React.createElement(AltList, { commentID: commentID }),
+      React.createElement(AltList, { }),
       domContainer
     );
   });

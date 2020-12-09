@@ -3,69 +3,27 @@
 class Choice extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { };
+        this.state = { id: props.id, description: props.description, creation_date: props.creation_date, choice_name: props.choice_name, choice_desc: props.choice_desc};
     }
 
+    render() {
+        var date = new Date(this.state.creation_date); 
 
-  render() {
-        var data = {};
-        var choice_name = "";
-        var choice_desc = "";
-
-        const urlParams = new URLSearchParams(window.location.search);
-        data["choiceID"] = urlParams.get('id');
-
-        var js = JSON.stringify(data);
-        console.log("JS:" + js);
-
-        choice_name = "Test Choice";
-        choice_desc = "Test desc";
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", get_choice_url, false);
-        xhr.send(js);
-
-        console.log(xhr);
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-            if (xhr.status == 200) {
-                var js = JSON.parse(xhr.responseText);
-                console.log("XHR:" + xhr.responseText);
-                console.log(js["list"]);
-
-                choice_name = js["choice"]["name"];
-                choice_desc = js["choice"]["description"];
-            } else {
-                console.log("actual:" + xhr.responseText)
-                var js = JSON.parse(xhr.responseText);
-                var err = js["response"];
-                alert (err);
-            }
-        }
-
-        console.log("Sending request");
-        return React.createElement(
-            'div',
-            { },
-            React.createElement(
-                'h2',
-                {},
-                'Choice: ' + choice_name
-            ),
-            React.createElement(
-                'p',
-                {},
-                'Description: ' + choice_desc
-            )
+        return (
+            <div className="choice_box" style={{margin: "5px", border: "solid", position: "relative", display: "block", overflow: "auto", overflowX: "hidden"}}>
+                <div className="choice_name" style={{margin: "5px"}}>
+                    <h2>{"Name: " + this.state.choice_name}</h2>
+                </div>
+                <div className="choice_id" style={{margin: "5px"}}>
+                    <p>{"ID: " + this.state.id}</p>
+                </div>
+                <div className="choice_date" style={{margin: "5px"}}>
+                    <p>{"Created: " + date.toString()}</p>
+                </div>
+                <div className="choice_is_completed" style={{margin: "5px"}}>
+                    <p>{"Completed? " + "false"}</p>
+                </div>
+            </div>
         );
     }
 }
-
-// Find all DOM containers, and render Like buttons into them.
-document.querySelectorAll('.choice')
-  .forEach(domContainer => {
-    // Read the comment ID from a data-* attribute.
-    const commentID = domContainer.dataset.commentid;
-    ReactDOM.render(
-      React.createElement(Choice, { commentID: commentID }),
-      domContainer
-    );
-  });
