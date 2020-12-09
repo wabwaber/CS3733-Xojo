@@ -13,10 +13,10 @@ public class AddFeedbackResponse {
 		this.httpCode = code;
 	}
 	
-	public AddFeedbackResponse(Feedback f, int code) {
+	public AddFeedbackResponse(Feedback f) {
 		this.feedback = f;
 		this.error = "";
-		this.httpCode = code;
+		this.httpCode = 200;
 	}
 	
 	public String toString() {

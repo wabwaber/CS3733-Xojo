@@ -10,9 +10,9 @@ public class CompleteChoiceResponse {
 		this.httpCode = code;
 	}
 	
-	public CompleteChoiceResponse(int code) {
+	public CompleteChoiceResponse() {
 		this.error = "";
-		this.httpCode = code;
+		this.httpCode = 200;
 	}
 	
 	public String toString() {

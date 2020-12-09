@@ -21,7 +21,7 @@ public class FeedbackDAO {
 	
 	public void getFeedback(String alternativeID, List<Feedback> feedback, List<String> names) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT alternativeID, M.memberID, feedbackDesc, timeCreated, memberName FROM FeedBack F join TeamMember M on F.memberID = M.memberID WHERE alternativeID = ?;");
+			PreparedStatement ps = conn.prepareStatement("SELECT alternativeID, M.memberID, feedbackDesc, timeCreated, memberName FROM Feedback F join TeamMember M on F.memberID = M.memberID WHERE alternativeID = ?;");
 			ps.setString(1, alternativeID);
     		ResultSet resultSet = ps.executeQuery();
     		

@@ -9,9 +9,9 @@ public class SetVotesResponse {
 		this.httpCode = code;
 	}
 	
-	public SetVotesResponse(int code) {
+	public SetVotesResponse() {
 		this.error = "";
-		this.httpCode = code;
+		this.httpCode = 200;
 	}
 	
 	public String toString() {
