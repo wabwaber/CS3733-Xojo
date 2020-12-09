@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wpi.xojo.g2.project.model.Feedback;
+import wpi.xojo.g2.project.model.FeedbackName;
 
 public class FeedbackDAO {
 	java.sql.Connection conn;
@@ -19,20 +20,26 @@ public class FeedbackDAO {
     	}
 	}
 	
-	public void getFeedback(String alternativeID, List<Feedback> feedback, List<String> names) throws Exception {
+	public List<FeedbackName> getFeedback(String alternativeID) throws Exception {
+		
+		List<FeedbackName> feedback = new ArrayList<FeedbackName>();
+				
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT alternativeID, M.memberID, feedbackDesc, timeCreated, memberName FROM Feedback F join TeamMember M on F.memberID = M.memberID WHERE alternativeID = ?;");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Feedback F join TeamMember M on F.memberID = M.memberID WHERE alternativeID = ?;");
 			ps.setString(1, alternativeID);
     		ResultSet resultSet = ps.executeQuery();
     		
     		while (resultSet.next()) {
-    			Feedback f = FeedbackDAO.generateFeedback(resultSet);
-    			feedback.add(f);
-    			names.add(resultSet.getString("memberName"));
+    			String name = resultSet.getString("memberName");
+    			String desc = resultSet.getString("feedbackDesc");
+    			Timestamp time = resultSet.getTimestamp("timeCreated");
+    			feedback.add(new FeedbackName(name, desc, time));
     		}
     		
     		resultSet.close();
     		ps.close();
+    		
+    		return feedback;
 		} catch (Exception e) {
 			throw new Exception("Failed in getting feedback: " + e.getMessage());
 		}

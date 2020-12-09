@@ -11,13 +11,14 @@ import wpi.xojo.g2.project.db.FeedbackDAO;
 import wpi.xojo.g2.project.http.GetFeedbackRequest;
 import wpi.xojo.g2.project.http.GetFeedbackResponse;
 import wpi.xojo.g2.project.model.Feedback;
+import wpi.xojo.g2.project.model.FeedbackName;
 
 public class GetFeedbackHandler implements RequestHandler<GetFeedbackRequest,GetFeedbackResponse> {
 	LambdaLogger logger;
 	
-	void getFeedbackStuff(String alternativeID, List<Feedback> feedbackBodies, List<String> names) throws Exception {
+	List<FeedbackName> getFeedback(String alternativeID) throws Exception {
 		FeedbackDAO dao = new FeedbackDAO();
-		dao.getFeedback(alternativeID, feedbackBodies, names);
+		return dao.getFeedback(alternativeID);
 	}
 
 	@Override
@@ -28,11 +29,8 @@ public class GetFeedbackHandler implements RequestHandler<GetFeedbackRequest,Get
 		
 		GetFeedbackResponse response;
 		try {
-			
-			List<Feedback> feedbackBodies = new ArrayList<Feedback>();
-			List<String> names = new ArrayList<String>();
-			getFeedbackStuff(req.alternativeID, feedbackBodies, names);
-			response = new GetFeedbackResponse(feedbackBodies, names);
+			List<FeedbackName> feedback = getFeedback(req.alternativeID);
+			response = new GetFeedbackResponse(feedback);
 			
 		} catch (Exception e) {
 			response = new GetFeedbackResponse("Unable to get feedback: " + req.alternativeID + " (" + e.getMessage() + ")", 400);
