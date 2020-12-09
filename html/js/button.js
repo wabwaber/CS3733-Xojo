@@ -10,12 +10,15 @@ class Button extends React.Component {
     if (this.state.pressed) {
       if (this.props.commentID == 'Add') {
         add_alternative();
+        this.state.pressed = false;
       }
       else if (this.props.commentID == 'Create') {
         request_choice();
+        this.state.pressed = false;
       }
-      else if (this.props.commentID == 'Login') {
+      else if (this.props.commentID == 'Participate') {
         request_login();
+        this.state.pressed = false;
       }
     }
 
