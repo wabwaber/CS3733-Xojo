@@ -1,7 +1,5 @@
 'use strict';
 
-
-
 function delete_choices(date) {
     console.log("Deleting choices");
     
