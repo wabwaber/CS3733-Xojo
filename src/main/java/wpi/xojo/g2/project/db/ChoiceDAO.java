@@ -162,7 +162,7 @@ public class ChoiceDAO {
     public boolean deleteChoices(Timestamp t) throws Exception {
     	try {
     		
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE timeCreated > ?");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE timeCreated < ?");
 	        ps.setTimestamp(1, t);
 	        ResultSet resultSet = ps.executeQuery();
 	        
