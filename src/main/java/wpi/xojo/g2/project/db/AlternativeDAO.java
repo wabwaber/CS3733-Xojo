@@ -88,6 +88,31 @@ public class AlternativeDAO {
 		}
 	}
 	
+	public boolean deleteAlternatives(String choiceID) throws Exception {
+		try {
+    		
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative WHERE choiceID = ?");
+	        ps.setString(1, choiceID);
+	        ResultSet resultSet = ps.executeQuery();
+	        
+	        FeedbackDAO fdao = new FeedbackDAO();
+	        VoteDAO vdao = new VoteDAO();
+	        
+	        while (resultSet.next()) {
+	        	String id = resultSet.getString("alternativeID");
+	        	if (!fdao.deleteFeedback(id)) {
+	        		return false;
+	        	}
+	        	if(!vdao.deleteVotes(id)) {
+	        		return false;
+	        	}
+	        }
+	        return true;
+    	} catch (Exception e) {
+    		throw new Exception("Failed to complete choice: " + e.getMessage());
+    	}
+	}
+	
 	
 	public static Alternative generateAlternative(ResultSet resultSet) throws Exception {
 		String ID  = resultSet.getString("alternativeID");

@@ -10,9 +10,9 @@ public class DeleteChoicesResponse {
 		this.httpCode = code;
 	}
 	
-	public DeleteChoicesResponse(int code) {
+	public DeleteChoicesResponse() {
 		this.error = "";
-		this.httpCode = code;
+		this.httpCode = 200;
 	}
 	
 	public String toString() {

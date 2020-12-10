@@ -135,17 +135,17 @@ public class ChoiceDAO {
     	}
     }
     
-    public boolean completeChoice(String ID) throws Exception {
+    public boolean completeChoice(String choiceID) throws Exception {
     	try {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE choiceID = ?");
-	        ps.setString(1, ID);
+	        ps.setString(1, choiceID);
 	        ResultSet resultSet = ps.executeQuery();
 	        
 	        if (resultSet.next()) {
 	        	ps.close();
 	        	ps = conn.prepareStatement("UPDATE Choice SET completed = ? WHERE choiceID = ?");
 	        	ps.setBoolean(1, true);
-	        	ps.setString(2, ID);
+	        	ps.setString(2, choiceID);
 	            ps.executeUpdate();
 	            return true;
 	        }
@@ -157,6 +157,31 @@ public class ChoiceDAO {
 		} catch (Exception e) {
 	        throw new Exception("Failed to complete choice: " + e.getMessage());
 		}
+    }
+    
+    public boolean deleteChoices(Timestamp t) throws Exception {
+    	try {
+    		
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE timeCreated > ?");
+	        ps.setTimestamp(1, t);
+	        ResultSet resultSet = ps.executeQuery();
+	        
+	        AlternativeDAO adao = new AlternativeDAO();
+	        MemberDAO mdao = new MemberDAO();
+	        
+	        while (resultSet.next()) {
+	        	String id = resultSet.getString("choiceID");
+	        	if (!adao.deleteAlternatives(id)) {
+	        		return false;
+	        	}
+	        	if(!mdao.deleteMembers(id)) {
+	        		return false;
+	        	}
+	        }
+	        return true;
+    	} catch (Exception e) {
+    		throw new Exception("Failed to complete choice: " + e.getMessage());
+    	}
     }
     
 

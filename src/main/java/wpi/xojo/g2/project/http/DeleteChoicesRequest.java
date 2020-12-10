@@ -7,7 +7,6 @@ public class DeleteChoicesRequest {
 	public Timestamp time;
 
 	public DeleteChoicesRequest() {
-
 	}
 
 	public DeleteChoicesRequest(Timestamp time) {

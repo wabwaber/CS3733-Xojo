@@ -116,6 +116,17 @@ public class MemberDAO {
     	}
     }
     
+    public boolean deleteMembers(String choiceID) throws Exception {
+    	try {
+    		PreparedStatement ps = conn.prepareStatement("DELETE FROM TeamMember WHERE choiceID = ?");
+    		ps.setString(1, choiceID);
+    		ps.executeUpdate();
+    		return true;
+    	} catch (Exception e) {
+    		throw new Exception("Failed in deleting feedback: " + e.getMessage());
+    	}
+    }
+    
     public static TeamMember generateMember(ResultSet resultSet) throws Exception {
     	String ID  = resultSet.getString("memberID");
     	String choiceID = resultSet.getString("choiceID");
