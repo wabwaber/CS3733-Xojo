@@ -34,7 +34,14 @@ class AltList extends React.Component {
         }
     }
 
+    get_username(mem_id) {
+
+    }
+
     render() {
+        // Set loading
+        set_loading(true);
+
         var data = {};
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -53,7 +60,7 @@ class AltList extends React.Component {
                 var js = JSON.parse(xhr.responseText);
                 console.log("XHR:" + xhr.responseText);
                 
-                for (const alt of js["list"]) {
+                for (const [i, alt] of js["list"].entries()) {
                     console.log(alt["description"]);
 
                     var votes = this.get_votes(alt["alternativeID"]);
@@ -66,8 +73,12 @@ class AltList extends React.Component {
                         feedback: [],
                         approvals: votes.approvals,
                         disapprovals: votes.disapprovals,
+                        user: "You",
+                        choice_id: urlParams.get('id')
                     }))
                 }
+
+                set_loading(false);
 
             } else {
                 console.log("actual:" + xhr.responseText)
