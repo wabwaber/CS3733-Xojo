@@ -1,4 +1,6 @@
 function request_login() {
+    // Set loading notification
+    set_loading(true);
 
     // Get id from url and data from page
     const urlParams = new URLSearchParams(window.location.search);
@@ -31,55 +33,73 @@ function request_login() {
                 // Good response
                 if (xhr.status == 200) {
                     var js = JSON.parse(xhr.responseText);
-                    memberID = js["member"]["memberID"];
-                    firstTime = js["firstTime"];
-                    console.log ("XHR:" + xhr.responseText);
-                    console.log ("Memberid: " + memberID);
-                    console.log("successful login");
+                    if (js["httpCode"] == 200) {
 
-                    // If first time, register for voting
-                    if (firstTime) {
+                        // Username and password good
+                        memberID = js["member"]["memberID"];
+                        firstTime = js["firstTime"];
+                        console.log ("XHR:" + xhr.responseText);
+                        console.log ("Memberid: " + memberID);
+                        console.log("successful login");
 
-                        // Build new XHR request
-                        var voting_data = {};
-                        voting_data["choiceID"] = choiceID;
-                        voting_data["memberID"] = memberID;
+                        // If first time, register for voting
+                        if (firstTime) {
 
-                        var voting_js = JSON.stringify(voting_data);
-                        console.log("JS:" + voting_js);
-                        var voting_xhr = new XMLHttpRequest();
-                        voting_xhr.open("POST", set_vote_url, false);
+                            // Build new XHR request
+                            var voting_data = {};
+                            voting_data["choiceID"] = choiceID;
+                            voting_data["memberID"] = memberID;
 
-                        voting_xhr.send(voting_js);
+                            var voting_js = JSON.stringify(voting_data);
+                            console.log("JS:" + voting_js);
+                            var voting_xhr = new XMLHttpRequest();
+                            voting_xhr.open("POST", set_vote_url, false);
 
-                        if (voting_xhr.readyState == XMLHttpRequest.DONE) {
-                            
-                            // Good resp
-                            if (voting_xhr.status == 200) {
-                                var js = JSON.parse(voting_xhr.responseText);
-                                if (js["httpCode"] == 200) {
-                                    console.log(voting_xhr);
-                                    console.log("Registered");
+                            voting_xhr.send(voting_js);
+
+                            if (voting_xhr.readyState == XMLHttpRequest.DONE) {
+                                
+                                // Good resp
+                                if (voting_xhr.status == 200) {
+                                    var js = JSON.parse(voting_xhr.responseText);
+                                    if (js["httpCode"] == 200) {
+                                        console.log(voting_xhr);
+                                        console.log("Registered");
+                                    }
+                                } else {
+                                    alert("Something went wrong.");
+                                    return;
                                 }
-                            } else {
-                                alert("Something went wrong.");
-                                return;
                             }
                         }
-                    }
                     
-                    // Goto view choice screen
-                    window.location.href = 'view_choice.html?id=' + choiceID + '&memberid=' + memberID;
+                        // Goto view choice screen
+                        window.location.href = 'view_choice.html?id=' + choiceID + '&memberid=' + memberID;
 
-                 } else {
-                     console.log("actual:" + xhr.responseText)
-                      var js = JSON.parse(xhr.responseText);
-                      var err = js["response"];
-                      alert (err);
-                 }
+                    } else {
+
+                        // Bad username or password
+                        // Undraw loading notification
+                        set_loading(false);
+
+                        alert("Choice is full or incorrect password.");
+                    }
+
+                } else {
+                    // Undraw loading notification
+                    set_loading(false);
+
+                    console.log("actual:" + xhr.responseText)
+                    var js = JSON.parse(xhr.responseText);
+                    var err = js["response"];
+                    alert (err);
+                }
             }
         };
     } else {
+        // Undraw loading notification
+        set_loading(false);
+
         alert("Must enter username and password");
     }
 }
