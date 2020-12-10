@@ -27,9 +27,13 @@ public class GetChoiceHandler implements RequestHandler<GetChoiceRequest,GetChoi
 		
 		try {
 			Choice choice = getChoice(req.choiceID);
-			response = new GetChoiceResponse(choice);
+			if (choice != null) {
+				response = new GetChoiceResponse(choice);
+			} else {
+				response = new GetChoiceResponse("Choice doesn't exist: " + req.choiceID, 403);
+			}
 		} catch (Exception e) {
-			response = new GetChoiceResponse(e.getMessage(), 403);
+			response = new GetChoiceResponse(e.getMessage(), 400);
 		}
 		
 		return response;

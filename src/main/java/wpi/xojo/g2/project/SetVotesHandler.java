@@ -27,7 +27,7 @@ public class SetVotesHandler implements RequestHandler<SetVotesRequest, SetVotes
 		
 		try {
 			if(setVotes(req.choiceID, req.memberID)) {
-				response = new SetVotesResponse(200);
+				response = new SetVotesResponse();
 			} else {
 				response = new SetVotesResponse("Failed to set votes for: " + req.memberID, 400);
 			}

@@ -22,7 +22,7 @@ public class GetChoiceHandlerTest extends LambdaTest {
 	
 	@Test
 	public void testGet() {
-		GetChoiceRequest ccr = new GetChoiceRequest("a667170f-ee95-48ac-8ee4-45a3560f672f");
+		GetChoiceRequest ccr = new GetChoiceRequest("e781cbeb-afeb-43e3-b49d-ea8e5db85fa2");
 		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
 		
 		try {

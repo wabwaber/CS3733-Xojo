@@ -2,7 +2,6 @@ package wpi.xojo.g2.project.http;
 
 import java.util.List;
 
-
 public class GetVotesResponse {
 	public final List<String> approvals;
 	public final List<String> disapprovals;

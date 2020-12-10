@@ -30,7 +30,7 @@ public class ChoiceDAO {
     public Choice getChoice(String choiceID) throws Exception {
     	try {
             Choice choice = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE choiceID = ?;");
             ps.setString(1,  choiceID);
             ResultSet resultSet = ps.executeQuery();
             
@@ -56,7 +56,7 @@ public class ChoiceDAO {
      */
     public boolean addChoice(Choice choice) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE choiceID = ?;");
             ps.setString(1, choice.choiceID);
             ResultSet resultSet = ps.executeQuery();
             
@@ -68,13 +68,15 @@ public class ChoiceDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,choiceName,choiceDesc,maxMembers,timeCreated) values(?,?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,choiceName,choiceDesc,maxMembers,timeCreated,completed) values(?,?,?,?,?,?);");
             ps.setString(1, choice.choiceID);
             ps.setString(2, choice.name);
             ps.setString(3, choice.description);
             ps.setInt(4, choice.maxMembers);
             ps.setTimestamp(5, choice.timeCreated);
+            ps.setBoolean(6, choice.completed);
             ps.execute();
+            ps.close();
             return true;
 
         } catch (Exception e) {
@@ -133,6 +135,30 @@ public class ChoiceDAO {
     	}
     }
     
+    public boolean completeChoice(String ID) throws Exception {
+    	try {
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE choiceID = ?");
+	        ps.setString(1, ID);
+	        ResultSet resultSet = ps.executeQuery();
+	        
+	        if (resultSet.next()) {
+	        	ps.close();
+	        	ps = conn.prepareStatement("UPDATE Choice SET completed = ? WHERE choiceID = ?");
+	        	ps.setBoolean(1, true);
+	        	ps.setString(2, ID);
+	            ps.executeUpdate();
+	            return true;
+	        }
+	        
+	        resultSet.close();
+	        ps.close();
+	        return false;
+        
+		} catch (Exception e) {
+	        throw new Exception("Failed to complete choice: " + e.getMessage());
+		}
+    }
+    
 
     /**
      * Takes in a resultSet and turns it into a choice
@@ -145,10 +171,10 @@ public class ChoiceDAO {
         String name = resultSet.getString("choiceName");
         String description = resultSet.getString("choiceDesc");
         int maxMembers = resultSet.getInt("maxMembers");
-        Timestamp date = resultSet.getTimestamp("timeCreated");
-        boolean completed = resultSet.getBoolean("isCompleted");
+        Timestamp time = resultSet.getTimestamp("timeCreated");
+        boolean completed = resultSet.getBoolean("completed");
         
-        return new Choice (ID, name, description, maxMembers, date, completed);
+        return new Choice (ID, name, description, maxMembers, time, completed);
     }
 
 }

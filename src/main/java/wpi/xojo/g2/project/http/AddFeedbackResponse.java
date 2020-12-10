@@ -1,15 +1,20 @@
 package wpi.xojo.g2.project.http;
 
-public class SetVotesResponse {
+import wpi.xojo.g2.project.model.Feedback;
+
+public class AddFeedbackResponse {
+	public final Feedback feedback;
 	public final String error;
 	public final int httpCode;
 	
-	public SetVotesResponse(String error, int code) {
+	public AddFeedbackResponse(String error, int code) {
+		this.feedback = null;
 		this.error = error;
 		this.httpCode = code;
 	}
 	
-	public SetVotesResponse() {
+	public AddFeedbackResponse(Feedback f) {
+		this.feedback = f;
 		this.error = "";
 		this.httpCode = 200;
 	}
