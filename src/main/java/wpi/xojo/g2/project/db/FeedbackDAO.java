@@ -65,8 +65,8 @@ public class FeedbackDAO {
 		String alternativeID = resultSet.getString("alternativeID");
 		String memberID = resultSet.getString("memberID");
 		String desc = resultSet.getString("feedbackDesc");
-		Timestamp date = resultSet.getTimestamp("timeCreated");
+		Timestamp time = resultSet.getTimestamp("timeCreated");
 		
-		return new Feedback(alternativeID, memberID, desc, date);
+		return new Feedback(alternativeID, memberID, desc, time);
 	}
 }

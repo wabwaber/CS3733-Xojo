@@ -11,12 +11,12 @@ public class Choice {
 	public final Timestamp timeCreated;
 	public final boolean completed;
 	
-	public Choice(String ID, String name, String desc, int maxMembers, Timestamp date, boolean completed) {
+	public Choice(String ID, String name, String desc, int maxMembers, Timestamp time, boolean completed) {
 		this.choiceID = ID;
 		this.name = name;
 		this.description = desc;
 		this.maxMembers = maxMembers;
-		this.timeCreated = date;
+		this.timeCreated = time;
 		this.completed = completed;
 	}
 	
@@ -26,8 +26,8 @@ public class Choice {
 		this.name = name;
 		this.description = desc;
 		this.maxMembers = maxMembers;	
-		Timestamp d = new Timestamp(java.lang.System.currentTimeMillis());
-		this.timeCreated = d;
+		Timestamp t = new Timestamp(java.lang.System.currentTimeMillis());
+		this.timeCreated = t;
 		this.completed = false;
 	}
 	

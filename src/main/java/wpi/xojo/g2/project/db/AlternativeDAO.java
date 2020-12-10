@@ -2,11 +2,7 @@ package wpi.xojo.g2.project.db;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
 import wpi.xojo.g2.project.model.Alternative;
-import wpi.xojo.g2.project.model.Vote;
 
 public class AlternativeDAO {
 	java.sql.Connection conn;
@@ -65,6 +61,30 @@ public class AlternativeDAO {
             
 		} catch (Exception e) {
 			throw new Exception("Failed to insert choice: " + e.getMessage());
+		}
+	}
+	
+	public boolean selectAlternative(String ID) throws Exception {
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative WHERE alternativeID = ?");
+	        ps.setString(1, ID);
+	        ResultSet resultSet = ps.executeQuery();
+	        
+	        if (resultSet.next()) {
+	        	ps.close();
+	        	ps = conn.prepareStatement("UPDATE Alternative SET selected = ? WHERE alternativeID = ?");
+	        	ps.setBoolean(1, true);
+	        	ps.setString(2, ID);
+	            ps.executeUpdate();
+	            return true;
+	        }
+	        
+	        resultSet.close();
+	        ps.close();
+	        return false;
+        
+		} catch (Exception e) {
+	        throw new Exception("Failed to select alternative: " + e.getMessage());
 		}
 	}
 	
