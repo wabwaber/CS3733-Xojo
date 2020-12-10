@@ -11,7 +11,7 @@ class Alternative extends React.Component {
         super(props);
         this.state = { id: props.id, description: props.description, 
             vote: props.vote, approvals: props.approvals, disapprovals: props.disapprovals,
-            feedback: props.feedback, key: props.key };
+            feedback: props.feedback, showFeedback: false, user: props.user, choice_id: props.choice_id };
         const urlParams = new URLSearchParams(window.location.search);
         this.choice_id = urlParams.get('id');
         this.member_id = urlParams.get('memberid');
@@ -23,6 +23,9 @@ class Alternative extends React.Component {
             console.log("Downvote");
             this.state.vote = -1;
         }
+
+        this.sendFeedback = this.sendFeedback.bind(this);
+        this.closeFeedback = this.closeFeedback.bind(this);
     }
 
     upvote() {
@@ -120,16 +123,26 @@ class Alternative extends React.Component {
         }
     }
 
-    addFeedback() {
+    openFeedback() {
         // Prompt the user for feed back and send it to backend
         console.log("Getting feedback");
+        this.setState({showFeedback: true});
+    }
+
+    sendFeedback(arg) {
+        console.log("Sending feedback " + arg);
+    }
+
+    closeFeedback() {
+        console.log("Closing feedback");
+        this.setState({showFeedback: false});
     }
 
     render() {
         // Construct the alternative box
         this.state.feedback = [["Joe Smith", "Some feedback"], ["Jack Smith", "Other Feedback"]];
         return (
-            <div className="alt_box" style={{margin: "5px", border: "solid", position: "relative", display: "block", overflow: "auto", overflowX: "hidden"}}>
+            <div className="alt_box" key={this.state.id} style={{margin: "5px", border: "solid", position: "relative", display: "block", overflow: "auto", overflowX: "hidden"}}>
                 <div className="alt_desc" style={{margin: "5px", width: "80%", float: "left"}}>
                     <p>{this.state.description}</p>
                 </div>
@@ -158,11 +171,16 @@ class Alternative extends React.Component {
                     <FeedbackList feedback={this.state.feedback}/>
                 </div>
                 <div className="add_feedback" style={{margin: "5px", width: "100%", float: "left"}}>
-                    <button onClick={() => this.addFeedback()}>Add Feedback</button>
+                    <div className="feedback_box" style={{display: (this.state.showFeedback ? "block" : "none")}}>
+                        <FeedbackBox sendHandler={this.sendFeedback.bind(this)} closeHandler={this.closeFeedback}/>
+                    </div>
+
+                    <div className="feedback_button" style={{display: (this.state.showFeedback ? "none" : "block")}}>
+                        <button onClick={() => this.openFeedback()}>Add Feedback</button>
+                    </div>
                 </div>
             </div>
         );
-
     }
 }
 
@@ -173,12 +191,35 @@ class FeedbackList extends React.Component {
     }
 
     render() {
-        const feedback_comments = this.state.feedback.map((fb) =>
-            <p><b>{fb[0]}</b>{': '}{fb[1]}</p>
+        const feedback_comments = this.state.feedback.map((fb, index) =>
+            <p key={index}><b>{fb[0]}</b>{': '}{fb[1]}</p>
         );
         return (
             <div className="feedback_list">
                 {feedback_comments}
+            </div>
+        )
+    }
+}
+
+class FeedbackBox extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {value: ''};
+        this.onChange = this.onChange.bind(this);
+    }
+
+    onChange(e) {
+        console.log("changing");
+        this.setState({ value: e.target.value });
+    }
+
+    render() {
+        return (
+            <div>
+                <input type="text" value={this.state.value} onChange={this.onChange} />
+                <button onClick={() => this.props.sendHandler(this.state.value)}>Send</button>
+                <button onClick={this.props.closeHandler}>Close</button>
             </div>
         )
     }
@@ -192,8 +233,8 @@ class VoteList extends React.Component {
 
     render() {
         if (this.state.members) {
-            const vote_element = this.state.members.map((member) =>
-                <div style={{display: (member.memberID != this.state.current_member ? "block" : "none")}}>
+            const vote_element = this.state.members.map((member, index) =>
+                <div key={index} style={{display: (member.memberID != this.state.current_member ? "block" : "none")}}>
                     <img src={this.state.isUpvote ? fullUpvoteUrl : fullDownvoteUrl} style={{width: "30px", height: "30px", display: "inline"}}/>
                     <p style={{display: "inline"}}>{member.name}</p> 
                 </div>
@@ -213,8 +254,6 @@ class VoteList extends React.Component {
 
 document.querySelectorAll('.alternative')
 .forEach(domContainer => {
-    // Read the comment ID from a data-* attribute.
-    const commentID = domContainer.dataset.commentid;
         ReactDOM.render(
             React.createElement(Alternative, { }),
             domContainer
