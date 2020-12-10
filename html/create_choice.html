@@ -4,54 +4,65 @@
 
         <meta charset="UTF-8" />
         <title>Create a Choice</title>
+        <link rel="stylesheet" href="style.css">
 
     </head>
     <body>
+
+        <div class="loading_notification" id="loading_choice" data-commentid="Loading..."></div>
 
         <div style="width: 100%; overflow: hidden;">
             <div class="choice_div" style="width: 500px; float: left;">
                 <h2>Create Choice</h2>
 
                 <h3>Choice Name:</h3>
+                <p>What's on your mind (required)?</p>
                 <div class="text_box" data-commentid="choice_text"></div>
 
                 <h3>Choice Description</h3>
+                <p>Come up with a description for your choice (required).</p>
                 <div class="description_box" data-commentid="choice_description"></div>
 
                 <h3>Enter number of team members:</h3>
+                <p>This is the maximum ammount of members that can participate in your choice (required).</p>
                 <div class="text_box" data-commentid="num_mem_text"></div>
+
+                <br>
+                <button id="create_btn" onclick="request_choice()">Create Choice</button>
             </div>
 
             <div class="alt_div" style="margin-left: 520px;">
                 <h2>Add Alternative</h2>
+                <p>Create some alternatives for your choice. You can add up to 5.</p>
+                <br>
 
-                <h3>Alternative Name:</h3>
-                <div class="text_box" data-commentid="alternative_text"></div>
-
-                <h3>Alternative Description</h3>
+                <h3>Alternative Description:</h3>
+    
                 <div class="description_box" data-commentid="alternative_description"></div>
 
-                <div class="button" data-commentid="Add"></div>
+                <button id="add_btn" onclick="add_alternative()">Add</button>
+
+                <div class="alt_construction" id="alt_list"></div>
             </div>
         </div>
-
-        <div class="alt-list" style="margin-left: 520px;"><!-- Placeholder -->Alternatives: (UNDER CONSTRUCTION)</div>
-        <div class="button" data-commentid="Create"></div>
 
         
         <!-- Load React. -->
         <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
         <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js" crossorigin></script>
+        
         <!-- Load React components. -->
+        <script src="js/api.js"></script>
         <script src="js/create_choice.js"></script>
         <script src="js/button.js"></script>
         <script src="js/description_box.js"></script>
         <script src="js/text_box.js"></script>
         <script src="js/alt_list.js"></script>
         <script src="js/add_alternative.js"></script>
-        <script src="js/api.js"></script>
+        <script src="js/alt_construction.js" type="text/babel"></script>
+        <script src="js/loading_notification.js" type="text/babel"></script>
 
     </body>
 </html>
