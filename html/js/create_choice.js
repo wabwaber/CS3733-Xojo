@@ -1,11 +1,10 @@
 var alternatives = new Array();
 var choice_id;
 
-function getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
-}
-
 function request_choice() {
+
+    // Set loading notification
+    set_loading(true);
 
     // Get information from page 
     var choice_name = document.getElementById("choice_text").value;
@@ -75,6 +74,9 @@ function request_choice() {
                             } 
                         }
                     } else {
+                        // Set loading notification
+                        set_loading(false);
+
                         console.log("actual:" + xhr.responseText)
                         var js = JSON.parse(xhr.responseText);
                         var err = js["response"];
@@ -87,10 +89,14 @@ function request_choice() {
                 window.location.href = 'user_login.html?id=' + choice_id;
             };
         } else {
+            // Set loading notification
+            set_loading(false);
             alert("You must enter at least 2 alternatives");
             return;
         }
     } else {
+        // Set loading notification
+        set_loading(false);
         alert("You must enter a name and a description for the Choice");
         return;
     }
