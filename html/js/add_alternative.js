@@ -5,13 +5,18 @@ function add_alternative() {
     }
 
     var alt_desc = document.getElementById('alternative_description').value;
+
     if (alt_desc) {
         alternatives.push(alt_desc);
         console.log(alternatives);
 
-        document.getElementById('alternative_text').value = "";
+        ReactDOM.render(
+            React.createElement(AltConstruction, { }),
+            document.getElementById('alt_list')
+        )
+
         document.getElementById('alternative_description').value = "";
     } else {
-        alert("Please enter a name and a description for the alterative.");
+        alert("Please enter a description for the alternative.");
     }
 }
