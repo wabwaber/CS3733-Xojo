@@ -4,41 +4,14 @@ class AltList extends React.Component {
     constructor(props) {
         super(props);
         this.state = { alternatives: [] };
+        this.get_alternatives();
     }
 
-    get_votes(alt_id) {
-        // Gets a list of approvals and disapprovals
-
-        var data = {}
-        data["alternativeID"] = alt_id;
-
-        var js = JSON.stringify(data);
-        console.log("JS:" + js);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", get_votes_url, false);
-        xhr.send(js);
-
-        console.log(xhr);
-
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-            if (xhr.status == 200) {
-                var js = JSON.parse(xhr.responseText);
-                console.log("XHR:" + xhr.responseText);
-                return { approvals: js["approvals"], disapprovals: js["disapprovals"] };
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    get_username(mem_id) {
+    get_username() {
 
     }
 
-    render() {
+    get_alternatives() {
         // Set loading
         set_loading(true);
 
@@ -74,7 +47,8 @@ class AltList extends React.Component {
                         approvals: votes.approvals,
                         disapprovals: votes.disapprovals,
                         user: "You",
-                        choice_id: urlParams.get('id')
+                        choice_id: urlParams.get('id'),
+                        key: alt["alternativeID"]
                     }))
                 }
 
@@ -87,13 +61,43 @@ class AltList extends React.Component {
                 alert (err);
             }
         }
+    }
 
+    get_votes(alt_id) {
+        // Gets a list of approvals and disapprovals
+
+        var data = {}
+        data["alternativeID"] = alt_id;
+
+        var js = JSON.stringify(data);
+        console.log("JS:" + js);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", get_votes_url, false);
+        xhr.send(js);
+
+        console.log(xhr);
+
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.status == 200) {
+                var js = JSON.parse(xhr.responseText);
+                console.log("XHR:" + xhr.responseText);
+                return { approvals: js["approvals"], disapprovals: js["disapprovals"] };
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    render() {
         console.log("Sending request");
-        return React.createElement(
-            'div',
-            { },
-            this.state.alternatives
-        );
+        return (
+            <div>
+                {this.state.alternatives}
+            </div>
+        )
     }
 }
 
