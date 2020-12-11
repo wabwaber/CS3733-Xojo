@@ -8,8 +8,31 @@ class AltList extends React.Component {
     }
 
     get_username(urlParams) {
+		var data = {}
+		
+		data["memberID"] = urlParams.get(memberid)
+		
+	    var js = JSON.stringify(data);
+        console.log("JS:" + js);
 
-        return js["member"]["name"];
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", get_member_url, false);
+        xhr.send(js);
+
+		console.log(xhr);
+		
+		if (xhr.readyState == XMLHttpRequest.Done) {
+			if (xhr.status == 200) {
+				var js = JSON.parse(xhr.responseText);
+				console.log("XHR: " + xhr.responseText);
+				
+				return js["member"]["name"];
+			} else {
+				return null
+			}
+		} else {
+			return null
+		}
     }
 
     get_alternatives() {
