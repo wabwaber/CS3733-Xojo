@@ -144,7 +144,7 @@ class Alternative extends React.Component {
         var js = JSON.stringify(data);
         console.log("JS:" + js);
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", change_vote_url, true);
+        xhr.open("POST", add_feedback_url, true);
 
         xhr.send(js);
 
@@ -158,6 +158,10 @@ class Alternative extends React.Component {
 
                     if (js["httpCode"] == 200) {
                         console.log("Feedback sent successfully");
+
+                        var timestamp = js["timeCreated"]; 
+                        self.setState({feedback: self.state.feedback.push([self.state.feedback.push, fb, timestamp])})
+
                     } else {
                         alert("There was a problem sending feedback.")
                     }
@@ -173,7 +177,7 @@ class Alternative extends React.Component {
 
     render() {
         // Construct the alternative box
-        this.state.feedback = [["Joe Smith", "Some feedback"], ["Jack Smith", "Other Feedback"]];
+        //this.state.feedback = [["Joe Smith", "Some feedback", 1607718455147], ["Jack Smith", "Other Feedback", 1607718455147]];
         return (
             <div className="alt_box" key={this.state.id} style={{margin: "5px", border: "solid", position: "relative", display: "block", overflow: "auto", overflowX: "hidden"}}>
                 <div className="alt_desc" style={{margin: "5px", width: "80%", float: "left"}}>

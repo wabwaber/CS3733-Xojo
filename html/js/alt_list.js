@@ -7,8 +7,9 @@ class AltList extends React.Component {
         this.get_alternatives();
     }
 
-    get_username() {
+    get_username(urlParams) {
 
+        return js["member"]["name"];
     }
 
     get_alternatives() {
@@ -35,7 +36,8 @@ class AltList extends React.Component {
                 
                 for (const [i, alt] of js["list"].entries()) {
                     console.log(alt["description"]);
-
+                    
+                    var username = this.get_username(urlParams);
                     var votes = this.get_votes(alt["alternativeID"]);
 
                     // Construct list of alternatives
@@ -46,7 +48,7 @@ class AltList extends React.Component {
                         feedback: [],
                         approvals: votes.approvals,
                         disapprovals: votes.disapprovals,
-                        user: "You",
+                        user: username,
                         choice_id: urlParams.get('id'),
                         key: alt["alternativeID"]
                     }))
