@@ -1,15 +1,14 @@
 package wpi.xojo.g2.project.http;
 
-import java.sql.Timestamp;
 
 public class DeleteChoicesRequest {
 
-	public Timestamp time;
+	public Long time;
 
 	public DeleteChoicesRequest() {
 	}
 
-	public DeleteChoicesRequest(Timestamp time) {
+	public DeleteChoicesRequest(Long time) {
 		this.time = time;
 	}
 

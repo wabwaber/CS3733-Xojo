@@ -10,8 +10,6 @@ import wpi.xojo.g2.project.model.Choice;
 
 public class ChoiceDAO {
 	java.sql.Connection conn;
-	
-	final String tblName = "Choice";   // Exact capitalization
 
     public ChoiceDAO() {
     	try  {
@@ -68,7 +66,7 @@ public class ChoiceDAO {
             
             resultSet.close();
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (choiceID,choiceName,choiceDesc,maxMembers,timeCreated,completed) values(?,?,?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO Choice (choiceID,choiceName,choiceDesc,maxMembers,timeCreated,completed) values(?,?,?,?,?,?);");
             ps.setString(1, choice.choiceID);
             ps.setString(2, choice.name);
             ps.setString(3, choice.description);
@@ -159,13 +157,13 @@ public class ChoiceDAO {
 		}
     }
     
-    public boolean deleteChoices(Timestamp t) throws Exception {
+    public boolean deleteChoices(Long t) throws Exception {
     	try {
     		
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice WHERE timeCreated < ?");
-	        ps.setTimestamp(1, t);
+			Timestamp time = new Timestamp(t);
+	        ps.setTimestamp(1, time);
 	        ResultSet resultSet = ps.executeQuery();
-	        
 	        AlternativeDAO adao = new AlternativeDAO();
 	        MemberDAO mdao = new MemberDAO();
 	        
@@ -177,10 +175,15 @@ public class ChoiceDAO {
 	        	if(!mdao.deleteMembers(id)) {
 	        		return false;
 	        	}
+	        	PreparedStatement ps2 = conn.prepareStatement("DELETE FROM Choice WHERE choiceID = ?");
+	        	ps2.setString(1, id);
+	        	ps2.executeUpdate();
+	        	ps2.close();
 	        }
+	        ps.close();
 	        return true;
     	} catch (Exception e) {
-    		throw new Exception("Failed to complete choice: " + e.getMessage());
+    		throw new Exception("Failed to delete choices: " + e.getMessage());
     	}
     }
     

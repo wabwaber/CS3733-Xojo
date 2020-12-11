@@ -11,8 +11,6 @@ import wpi.xojo.g2.project.model.TeamMember;
 public class MemberDAO {
 	java.sql.Connection conn;
 	
-	final String tblName = "TeamMember";   // Exact capitalization
-
     public MemberDAO() {
     	try  {
     		conn = DatabaseUtil.connect();
@@ -23,7 +21,7 @@ public class MemberDAO {
     public TeamMember getMember(String name, String choiceID) throws Exception {
     	try {
             TeamMember member = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberName = ? and choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE memberName = ? and choiceID = ?;");
             ps.setString(1,  name);
             ps.setString(2, choiceID);
             ResultSet resultSet = ps.executeQuery();
@@ -45,7 +43,7 @@ public class MemberDAO {
     public TeamMember getMember(String memberID) throws Exception {
     	try {
             TeamMember member = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE memberID = ?;");
             ps.setString(1, memberID);
             ResultSet resultSet = ps.executeQuery();
             
@@ -65,7 +63,7 @@ public class MemberDAO {
     
     public boolean addMember(TeamMember member) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberName = ? and choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE memberName = ? and choiceID = ?;");
             ps.setString(1, member.name);
             ps.setString(2, member.choiceID);
             ResultSet resultSet = ps.executeQuery();
@@ -82,7 +80,7 @@ public class MemberDAO {
             	return false;
             }
 
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (memberID,choiceID,memberName,memberPass) values(?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO TeamMember (memberID,choiceID,memberName,memberPass) values(?,?,?,?);");
             ps.setString(1, member.memberID);
             ps.setString(2, member.choiceID);
             ps.setString(3, member.name);

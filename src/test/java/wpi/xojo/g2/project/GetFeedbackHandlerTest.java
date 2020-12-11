@@ -20,12 +20,23 @@ public class GetFeedbackHandlerTest extends LambdaTest {
 		Assert.assertEquals(200, resp.httpCode);
 	}
 	
+	void testFailInput(String incoming) throws IOException {
+		GetFeedbackHandler handler = new GetFeedbackHandler();
+		GetFeedbackRequest req = new Gson().fromJson(incoming, GetFeedbackRequest.class);
+		
+		GetFeedbackResponse resp = handler.handleRequest(req, createContext("create"));
+		Assert.assertNotEquals(200, resp.httpCode);
+	}
+	
 	@Test
-	public void testGet() {
-		GetFeedbackRequest ccr = new GetFeedbackRequest("5058b13a-c060-4eca-8621-b5d5be73739b");
-		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
+	public void testGetFeedback() {
+		GetFeedbackRequest success = new GetFeedbackRequest("1");
+		GetFeedbackRequest fail = new GetFeedbackRequest("not real");
+		String successJSON = new Gson().toJson(success);
+		String failJSON = new Gson().toJson(fail);
 		try {
-			testSuccessInput(SAMPLE_INPUT_STRING);
+			testSuccessInput(successJSON);
+			testFailInput(failJSON);
 		} catch (IOException ioe) {
 			Assert.fail("Invalid:" + ioe.getMessage());
 		}
