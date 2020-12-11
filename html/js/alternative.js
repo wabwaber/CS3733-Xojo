@@ -31,7 +31,8 @@ class Alternative extends React.Component {
     upvote() {
         // Register a click on the upvote button and send an update to backend
         console.log("Upvoting");
-        console.log(this.state.id);
+        var self = this;
+
         // Check if upvote is already cast, deselect
         if (this.state.vote == 1) {
 
@@ -42,6 +43,12 @@ class Alternative extends React.Component {
             this.log_vote(null);
             this.state.vote = 0;
 
+            // Update approvals
+            var new_approvals = this.state.approvals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            this.setState({approvals: new_approvals});
 
 
         } else {
@@ -52,12 +59,22 @@ class Alternative extends React.Component {
 
             this.log_vote(true);
             this.state.vote = 1;
+
+            // Update approvals
+            var new_disapprovals = this.state.disapprovals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            var new_approvals = this.state.approvals;
+            new_approvals.push(this.state.username);
+            this.setState({approvals: new_approvals, disapprovals: new_disapprovals});
         }
     }
 
     downvote() {
         // Register a click on the downvote button and send an update to the backend
         console.log("Downvoting");
+        var self = this;
 
         // Check if downvote is already cast, deselect
         if (this.state.vote == -1) {
@@ -69,12 +86,28 @@ class Alternative extends React.Component {
             this.log_vote(null);
             this.state.vote = 0;
 
+            // Update disapprovals
+            var new_disapprovals = this.state.disapprovals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            this.setState({disapprovals: new_disapprovals});
+
         } else {
             document.getElementById('downvote'+this.state.id).src = fullDownvoteUrl;
             document.getElementById('upvote'+this.state.id).src = emptyUpvoteUrl;
 
             this.log_vote(false);
             this.state.vote = -1;
+
+            // Update disapprovals
+            var new_approvals = this.state.approvals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            var new_disapprovals = this.state.disapprovals;
+            new_disapprovals.push(this.state.username);
+            this.setState({disapprovals: new_disapprovals, approvals: new_approvals});
         }
     }
 
@@ -134,7 +167,7 @@ class Alternative extends React.Component {
     sendFeedback(fb) {
         console.log("Sending feedback " + fb);
         console.log("NAME: " + this.state.username);
-        
+
         var data = {};
         data["alternativeID"] = this.state.id;
         data["memberID"] = this.member_id;
@@ -186,7 +219,6 @@ class Alternative extends React.Component {
 
     render() {
         // Construct the alternative box
-        //this.state.feedback = [["Joe Smith", "Some feedback", 1607718455147], ["Jack Smith", "Other Feedback", 1607718455147]];
         return (
             <div className="alt_box" key={this.state.id} style={{margin: "5px", border: "solid", position: "relative", display: "block", overflow: "auto", overflowX: "hidden"}}>
                 <div className="alt_desc" style={{margin: "5px", width: "80%", float: "left"}}>
@@ -279,7 +311,7 @@ class VoteList extends React.Component {
     render() {
         if (this.state.members) {
             const vote_element = this.state.members.map((member, index) =>
-                <div key={index}>
+                <div key={index} style={{display: (member === this.state.current_member ? "none" : "block")}}>
                     <img src={this.state.isUpvote ? fullUpvoteUrl : fullDownvoteUrl} style={{width: "30px", height: "30px", display: "inline"}}/>
                     <p style={{display: "inline"}}>{member}</p> 
                 </div>

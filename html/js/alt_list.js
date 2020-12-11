@@ -92,7 +92,7 @@ class AltList extends React.Component {
 
     get_alternatives() {
         // Set loading
-        set_loading(true);
+        // set_loading(true);
 
         var data = {};
 
