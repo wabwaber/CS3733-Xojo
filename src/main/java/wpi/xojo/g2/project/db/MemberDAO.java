@@ -42,6 +42,27 @@ public class MemberDAO {
         }
     }
     
+    public TeamMember getMember(String memberID) throws Exception {
+    	try {
+            TeamMember member = null;
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberID = ?;");
+            ps.setString(1, memberID);
+            ResultSet resultSet = ps.executeQuery();
+            
+            if (resultSet.next()) {
+                member = MemberDAO.generateMember(resultSet);
+            }
+            resultSet.close();
+            ps.close();
+            
+            return member;
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            throw new Exception("Failed in getting member: " + e.getMessage());
+        }
+    }
+    
     public boolean addMember(TeamMember member) throws Exception {
         try {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE memberName = ? and choiceID = ?;");
@@ -113,6 +134,17 @@ public class MemberDAO {
 		    return -1;
     	} catch (Exception e) {
     		throw new Exception("Failed to count current members: " + e.getMessage());
+    	}
+    }
+    
+    public boolean deleteMembers(String choiceID) throws Exception {
+    	try {
+    		PreparedStatement ps = conn.prepareStatement("DELETE FROM TeamMember WHERE choiceID = ?");
+    		ps.setString(1, choiceID);
+    		ps.executeUpdate();
+    		return true;
+    	} catch (Exception e) {
+    		throw new Exception("Failed in deleting feedback: " + e.getMessage());
     	}
     }
     

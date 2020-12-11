@@ -137,11 +137,11 @@ public class VoteDAO {
     	}
     }
     
-    public List<String> getAlternativeVotes(String ID, boolean isUpvote) throws Exception {
+    public List<String> getAlternativeVotes(String alternativeID, boolean isUpvote) throws Exception {
 		List<String> votes = new ArrayList<String>();
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT memberName FROM Vote V join TeamMember M ON V.memberID = M.MemberID WHERE alternativeID = ? AND isUpvote = ?;");
-            ps.setString(1, ID);
+			PreparedStatement ps = conn.prepareStatement("SELECT M.memberName FROM Vote V join TeamMember M ON V.memberID = M.MemberID WHERE alternativeID = ? AND isUpvote = ?;");
+            ps.setString(1, alternativeID);
             ps.setBoolean(2, isUpvote);
             ResultSet resultSet = ps.executeQuery();
             
@@ -157,6 +157,33 @@ public class VoteDAO {
 			
 		}
 	}
+    
+    public boolean deleteVote(String alternativeID, String memberID) throws Exception {
+    	try {
+    		Vote v = getVote(alternativeID, memberID);
+    		if (v == null) {
+    			return false;
+    		}
+    		PreparedStatement ps = conn.prepareStatement("DELETE FROM Vote WHERE alternativeID = ? AND memberID = ?");
+    		ps.setString(1, alternativeID);
+    		ps.setString(2, memberID);
+    		ps.executeUpdate();
+    		return true;
+    	} catch (Exception e) {
+    		throw new Exception("Failed in deleting vote: " + e.getMessage());
+    	}
+    }
+    
+    public boolean deleteVotes(String alternativeID) throws Exception {
+    	try {
+    		PreparedStatement ps = conn.prepareStatement("DELETE FROM Vote WHERE alternativeID = ?");
+    		ps.setString(1, alternativeID);
+    		ps.executeUpdate();
+    		return true;
+    	} catch (Exception e) {
+    		throw new Exception("Failed in deleting votes: " + e.getMessage());
+    	}
+    }
     
     public static Vote generateVote(ResultSet resultSet) throws Exception {
     	String alternativeID = resultSet.getString("alternativeID");

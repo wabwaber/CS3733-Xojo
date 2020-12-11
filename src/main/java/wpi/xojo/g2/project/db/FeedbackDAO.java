@@ -61,6 +61,17 @@ public class FeedbackDAO {
 		}
 	}
 	
+	public boolean deleteFeedback(String alternativeID) throws Exception {
+    	try {
+    		PreparedStatement ps = conn.prepareStatement("DELETE FROM Feedback WHERE alternativeID = ?");
+    		ps.setString(1, alternativeID);
+    		ps.executeUpdate();
+    		return true;
+    	} catch (Exception e) {
+    		throw new Exception("Failed in deleting feedback: " + e.getMessage());
+    	}
+    }
+	
 	public static Feedback generateFeedback(ResultSet resultSet) throws Exception {
 		String alternativeID = resultSet.getString("alternativeID");
 		String memberID = resultSet.getString("memberID");
