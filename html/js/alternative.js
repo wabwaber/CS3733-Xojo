@@ -11,15 +11,15 @@ class Alternative extends React.Component {
         super(props);
         this.state = { id: props.id, description: props.description, 
             vote: props.vote, approvals: props.approvals, disapprovals: props.disapprovals,
-            feedback: props.feedback, showFeedback: false, user: props.user, choice_id: props.choice_id };
+            feedback: props.feedback, showFeedback: false, username: props.user, choice_id: props.choice_id };
         const urlParams = new URLSearchParams(window.location.search);
         this.choice_id = urlParams.get('id');
         this.member_id = urlParams.get('memberid');
 
-        if (this.state.approvals.some(v => v.memberID === this.member_id)) {
+        if (this.state.approvals.some(v => v === this.state.username)) {
             console.log("Upvote");
             this.state.vote = 1;
-        } else if (this.state.disapprovals.some(v => v.memberID === this.member_id)) {
+        } else if (this.state.disapprovals.some(v => v === this.state.username)) {
             console.log("Downvote");
             this.state.vote = -1;
         }
@@ -31,7 +31,8 @@ class Alternative extends React.Component {
     upvote() {
         // Register a click on the upvote button and send an update to backend
         console.log("Upvoting");
-        console.log(this.state.id);
+        var self = this;
+
         // Check if upvote is already cast, deselect
         if (this.state.vote == 1) {
 
@@ -42,6 +43,14 @@ class Alternative extends React.Component {
             this.log_vote(null);
             this.state.vote = 0;
 
+            // Update approvals
+            var new_approvals = this.state.approvals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            this.setState({approvals: new_approvals});
+
+
         } else {
 
             // Update page state
@@ -50,12 +59,22 @@ class Alternative extends React.Component {
 
             this.log_vote(true);
             this.state.vote = 1;
+
+            // Update approvals
+            var new_disapprovals = this.state.disapprovals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            var new_approvals = this.state.approvals;
+            new_approvals.push(this.state.username);
+            this.setState({approvals: new_approvals, disapprovals: new_disapprovals});
         }
     }
 
     downvote() {
         // Register a click on the downvote button and send an update to the backend
         console.log("Downvoting");
+        var self = this;
 
         // Check if downvote is already cast, deselect
         if (this.state.vote == -1) {
@@ -67,12 +86,28 @@ class Alternative extends React.Component {
             this.log_vote(null);
             this.state.vote = 0;
 
+            // Update disapprovals
+            var new_disapprovals = this.state.disapprovals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            this.setState({disapprovals: new_disapprovals});
+
         } else {
             document.getElementById('downvote'+this.state.id).src = fullDownvoteUrl;
             document.getElementById('upvote'+this.state.id).src = emptyUpvoteUrl;
 
             this.log_vote(false);
             this.state.vote = -1;
+
+            // Update disapprovals
+            var new_approvals = this.state.approvals.filter(function ( v ) {
+                return v !== self.state.username;
+            });
+
+            var new_disapprovals = this.state.disapprovals;
+            new_disapprovals.push(this.state.username);
+            this.setState({disapprovals: new_disapprovals, approvals: new_approvals});
         }
     }
 
@@ -129,8 +164,52 @@ class Alternative extends React.Component {
         this.setState({showFeedback: true});
     }
 
-    sendFeedback(arg) {
-        console.log("Sending feedback " + arg);
+    sendFeedback(fb) {
+        console.log("Sending feedback " + fb);
+        console.log("NAME: " + this.state.username);
+
+        var data = {};
+        data["alternativeID"] = this.state.id;
+        data["memberID"] = this.member_id;
+        data["feedbackDesc"] = fb;
+
+        var self = this;
+
+        var js = JSON.stringify(data);
+        console.log("JS:" + js);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", add_feedback_url, true);
+
+        xhr.send(js);
+
+        xhr.onloadend = function () {
+            console.log(xhr);
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+
+                // Good response
+                if (xhr.status == 200) {
+                    var js = JSON.parse(xhr.responseText);
+
+                    if (js["httpCode"] == 200) {
+                        console.log("Feedback sent successfully");
+
+                        var timestamp = js["timeCreated"]; 
+                        self.updateFeedbackList(fb, timestamp);
+
+                    } else {
+                        alert("There was a problem sending feedback.")
+                    }
+                }
+            }
+        }
+    }
+
+    updateFeedbackList(fb, time) {
+        var fb_list = this.state.feedback;
+        fb_list.push({"name": this.state.username, "description": fb, "timeCreated": time})
+        console.log(fb_list);
+        console.log(typeof(fb_list));
+        this.setState({feedback: fb_list});
     }
 
     closeFeedback() {
@@ -140,7 +219,6 @@ class Alternative extends React.Component {
 
     render() {
         // Construct the alternative box
-        this.state.feedback = [["Joe Smith", "Some feedback"], ["Jack Smith", "Other Feedback"]];
         return (
             <div className="alt_box" key={this.state.id} style={{margin: "5px", border: "solid", position: "relative", display: "block", overflow: "auto", overflowX: "hidden"}}>
                 <div className="alt_desc" style={{margin: "5px", width: "80%", float: "left"}}>
@@ -158,10 +236,10 @@ class Alternative extends React.Component {
                 </div>
                 <div className="votes" style={{margin: "5px", width: "100%", float: "left"}}>
                     <div className="approvals">
-                        <VoteList isUpvote={true} members={this.state.approvals} this_member={this.member_id}/>
+                        <VoteList isUpvote={true} members={this.state.approvals} this_username={this.state.username}/>
                     </div>
                     <div className="disapprovals">
-                        <VoteList isUpvote={false} members={this.state.disapprovals} this_member={this.member_id}/>
+                        <VoteList isUpvote={false} members={this.state.disapprovals} this_username={this.state.username}/>
                     </div>
                     <div className="totals">
                         <p>{"Approvals: " + this.state.approvals.length + " Disapprovals: " + this.state.disapprovals.length}</p>
@@ -192,7 +270,7 @@ class FeedbackList extends React.Component {
 
     render() {
         const feedback_comments = this.state.feedback.map((fb, index) =>
-            <p key={index}><b>{fb[0]}</b>{': '}{fb[1]}</p>
+            <p key={index}><b>{fb["name"]}</b>{': '}{fb["description"]}</p>
         );
         return (
             <div className="feedback_list">
@@ -210,7 +288,6 @@ class FeedbackBox extends React.Component {
     }
 
     onChange(e) {
-        console.log("changing");
         this.setState({ value: e.target.value });
     }
 
@@ -228,15 +305,15 @@ class FeedbackBox extends React.Component {
 class VoteList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isUpvote: props.isUpvote, members: props.members, current_member: props.this_member };
+        this.state = { isUpvote: props.isUpvote, members: props.members, current_member: props.this_username };
     }
 
     render() {
         if (this.state.members) {
             const vote_element = this.state.members.map((member, index) =>
-                <div key={index} style={{display: (member.memberID != this.state.current_member ? "block" : "none")}}>
+                <div key={index} style={{display: (member === this.state.current_member ? "none" : "block")}}>
                     <img src={this.state.isUpvote ? fullUpvoteUrl : fullDownvoteUrl} style={{width: "30px", height: "30px", display: "inline"}}/>
-                    <p style={{display: "inline"}}>{member.name}</p> 
+                    <p style={{display: "inline"}}>{member}</p> 
                 </div>
             );
 

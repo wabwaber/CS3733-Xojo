@@ -9,4 +9,6 @@ var set_vote_url = base_url + "https://08zq4xrt56.execute-api.us-east-2.amazonaw
 var change_vote_url = base_url + "https://o3h8rvze7i.execute-api.us-east-2.amazonaws.com/default/ChangeVote";
 var get_all_choices_url = base_url + "https://8sd8qn7h34.execute-api.us-east-2.amazonaws.com/default/GetAllChoices";
 var get_votes_url = base_url + "https://rn96a73fjb.execute-api.us-east-2.amazonaws.com/default/GetVotes";
-
+var add_feedback_url = base_url + "https://v8swldy9yh.execute-api.us-east-2.amazonaws.com/default/AddFeedback";
+var get_member_url = base_url + "https://widya6vy29.execute-api.us-east-2.amazonaws.com/default/GetMember";
+var get_feedback_url = base_url + "https://81uk3hjuzd.execute-api.us-east-2.amazonaws.com/default/GetFeedback";
