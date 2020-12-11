@@ -11,7 +11,7 @@ class AltList extends React.Component {
 
 		var data = {}
 		
-		data["memberID"] = urlParams.get(memberid)
+		data["memberID"] = urlParams.get("memberid")
 		
 	    var js = JSON.stringify(data);
         console.log("JS:" + js);
@@ -21,19 +21,19 @@ class AltList extends React.Component {
         xhr.send(js);
 
 		console.log(xhr);
-		
-		if (xhr.readyState == XMLHttpRequest.Done) {
+		if (xhr.readyState == XMLHttpRequest.DONE) {
 			if (xhr.status == 200) {
 				var js = JSON.parse(xhr.responseText);
 				console.log("XHR: " + xhr.responseText);
-				
+				console.log("NAME" + js["member"]["name"]);
 				return js["member"]["name"];
 			} else {
 				return null
 			}
 		} else {
 			return null
-		}
+        }
+    }
 
     get_votes(alt_id) {
         // Gets a list of approvals and disapprovals
@@ -49,7 +49,6 @@ class AltList extends React.Component {
         xhr.send(js);
 
         console.log(xhr);
-
         if (xhr.readyState == XMLHttpRequest.DONE) {
             if (xhr.status == 200) {
                 var js = JSON.parse(xhr.responseText);
@@ -119,7 +118,7 @@ class AltList extends React.Component {
                     var username = this.get_username(urlParams);
                     var votes = this.get_votes(alt["alternativeID"]);
                     var feedback = this.get_feedback(alt["alternativeID"]);
-
+                    
                     // Construct list of alternatives
                     this.state.alternatives.push(React.createElement(Alternative, 
                         {id: alt["alternativeID"], 

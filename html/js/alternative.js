@@ -133,7 +133,8 @@ class Alternative extends React.Component {
 
     sendFeedback(fb) {
         console.log("Sending feedback " + fb);
-
+        console.log("NAME: " + this.state.username);
+        
         var data = {};
         data["alternativeID"] = this.state.id;
         data["memberID"] = this.member_id;
