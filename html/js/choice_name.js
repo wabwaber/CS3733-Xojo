@@ -4,7 +4,12 @@ class ChoiceName extends React.Component {
     constructor(props) {
         super(props);
         this.state = { choice_name: "", choice_desc: "" };
-        this.get_name();
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+          this.get_name()
+        }, 400);
     }
 
     get_name() {
@@ -24,8 +29,8 @@ class ChoiceName extends React.Component {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             if (xhr.status == 200) {
                 var js = JSON.parse(xhr.responseText);
-                this.state.choice_name = js["choice"]["name"];
-                this.state.choice_desc = js["choice"]["description"];
+                this.setState({choice_name: js["choice"]["name"]});
+                this.setState({choice_desc: js["choice"]["description"]});
             }
         }
     }

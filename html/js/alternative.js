@@ -137,7 +137,7 @@ class Alternative extends React.Component {
         var data = {};
         data["alternativeID"] = this.state.id;
         data["memberID"] = this.member_id;
-        data["feedback"] = fb;
+        data["feedbackDesc"] = fb;
 
         var self = this;
 
@@ -160,7 +160,7 @@ class Alternative extends React.Component {
                         console.log("Feedback sent successfully");
 
                         var timestamp = js["timeCreated"]; 
-                        self.setState({feedback: self.state.feedback.push([self.state.feedback.push, fb, timestamp])})
+                        self.updateFeedbackList(fb, timestamp);
 
                     } else {
                         alert("There was a problem sending feedback.")
@@ -168,6 +168,14 @@ class Alternative extends React.Component {
                 }
             }
         }
+    }
+
+    updateFeedbackList(fb, time) {
+        var fb_list = this.state.feedback;
+        fb_list.push({"name": this.state.username, "description": fb, "timeCreated": time})
+        console.log(fb_list);
+        console.log(typeof(fb_list));
+        this.setState({feedback: fb_list});
     }
 
     closeFeedback() {
@@ -229,7 +237,7 @@ class FeedbackList extends React.Component {
 
     render() {
         const feedback_comments = this.state.feedback.map((fb, index) =>
-            <p key={index}><b>{fb[0]}</b>{': '}{fb[1]}</p>
+            <p key={index}><b>{fb["name"]}</b>{': '}{fb["description"]}</p>
         );
         return (
             <div className="feedback_list">
