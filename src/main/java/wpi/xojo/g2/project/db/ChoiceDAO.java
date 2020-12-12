@@ -117,7 +117,7 @@ public class ChoiceDAO {
     public List<Choice> getAllChoices() throws Exception {
     	List<Choice> choices = new ArrayList<Choice>();
     	try {
-    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice;");
+    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Choice ORDER BY timeCreated DESC;");
     		ResultSet resultSet = ps.executeQuery();
     		
     		while (resultSet.next()) {
