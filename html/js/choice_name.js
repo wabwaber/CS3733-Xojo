@@ -36,10 +36,42 @@ class ChoiceName extends React.Component {
 
                 // Update alt_list if choice is complete
                 if (js["choice"]["completed"]) {
-                    complete_choice.callback(true, "Complete");
+                    complete_choice.callback(true, this.get_completed_choice());
                 }
             }
         }
+    }
+
+    get_completed_choice() {
+        var data = {};
+
+        const urlParams = new URLSearchParams(window.location.search);
+        data["choiceID"] = urlParams.get('id');
+
+        var js = JSON.stringify(data);
+        console.log("JS:" + js);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", list_alt_url, false);
+        xhr.send(js);
+
+        console.log(xhr);
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.status == 200) {
+                var js = JSON.parse(xhr.responseText);
+                console.log("XHR:" + xhr.responseText);
+                
+                for (const alt of js["list"]) {
+                    console.log(alt["description"]);
+                    
+                    if (alt["selected"]) {
+                        return alt["description"];
+                    }
+                }
+            }
+        }
+
+        return "error finding selected alternative";
     }
 
     render() { 
