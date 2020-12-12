@@ -1,14 +1,16 @@
 'use strict';
 
+var complete_choice = (function () { });
+
 class ChoiceName extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { choice_name: "", choice_desc: "" };
+        this.state = { choice_name: "Loading name...", choice_desc: "Loading description...", complete: false, completed_choice: null };
     }
 
     componentDidMount() {
         setTimeout(() => {
-          this.get_name()
+            this.get_name()
         }, 400);
     }
 
@@ -31,6 +33,11 @@ class ChoiceName extends React.Component {
                 var js = JSON.parse(xhr.responseText);
                 this.setState({choice_name: js["choice"]["name"]});
                 this.setState({choice_desc: js["choice"]["description"]});
+
+                // Update alt_list if choice is complete
+                if (js["choice"]["completed"]) {
+                    complete_choice.callback(true, "Complete");
+                }
             }
         }
     }
