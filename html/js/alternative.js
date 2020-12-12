@@ -30,6 +30,12 @@ class Alternative extends React.Component {
     
     upvote() {
 
+        // First check if page is stale and choice is complete
+        if (this.checkChoice()) {
+            alert("Your page might be stale, please refresh.");
+            return;
+        }
+
         if (this.state.complete) {
             return;
         }
@@ -77,6 +83,12 @@ class Alternative extends React.Component {
     }
 
     downvote() {
+
+        // First check if page is stale and choice is complete
+        if (this.checkChoice()) {
+            alert("Your page might be stale, please refresh.");
+            return;
+        }
 
         if (this.state.complete) {
             return;
@@ -169,6 +181,12 @@ class Alternative extends React.Component {
     }
 
     openFeedback() {
+        // First check if page is stale and choice is complete
+        if (this.checkChoice()) {
+            alert("Your page might be stale, please refresh.");
+            return;
+        }
+        
         // Prompt the user for feed back and send it to backend
         console.log("Getting feedback");
         this.setState({showFeedback: true});
@@ -177,6 +195,12 @@ class Alternative extends React.Component {
     sendFeedback(fb) {
         console.log("Sending feedback " + fb);
         console.log("NAME: " + this.state.username);
+
+        // First check if page is stale and choice is complete
+        if (this.checkChoice()) {
+            alert("Your page might be stale, please refresh.");
+            return;
+        }
 
         var data = {};
         data["alternativeID"] = this.state.id;
@@ -228,6 +252,13 @@ class Alternative extends React.Component {
     }
 
     completeChoice() {
+
+        // First check if page is stale and choice is complete
+        if (this.checkChoice()) {
+            alert("Your page might be stale, please refresh.");
+            return;
+        }
+
         // Complete the choice for this alternative
         var data = {}
         data["alternativeID"] = this.state.id;
@@ -255,6 +286,36 @@ class Alternative extends React.Component {
             }
         }
     }
+
+    checkChoice() {
+        // returns true if choice is complete
+        var data = {};
+
+        const urlParams = new URLSearchParams(window.location.search);
+        data["choiceID"] = urlParams.get('id');
+
+        var js = JSON.stringify(data);
+        console.log("JS:" + js);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", get_choice_url, false);
+        xhr.send(js);
+
+        console.log(xhr);
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.status == 200) {
+                var js = JSON.parse(xhr.responseText);
+                // Update alt_list if choice is complete
+                if (js["choice"]["completed"]) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
 
     render() {
         // Construct the alternative box
