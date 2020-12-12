@@ -5,13 +5,37 @@ var complete_choice = (function () { });
 class ChoiceName extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { choice_name: "Loading name...", choice_desc: "Loading description...", complete: false, completed_choice: null };
+        this.state = { choice_name: "Loading name...", choice_desc: "Loading description...", user: "Loading user...", complete: false, completed_choice: null };
     }
 
     componentDidMount() {
         setTimeout(() => {
             this.get_name()
+            this.get_user()
         }, 400);
+    }
+
+    get_user() {
+        var data = {}
+        
+        const urlParams = new URLSearchParams(window.location.search);
+		data["memberID"] = urlParams.get("memberid")
+		
+	    var js = JSON.stringify(data);
+        console.log("JS:" + js);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", get_member_url, false);
+        xhr.send(js);
+
+		console.log(xhr);
+		if (xhr.readyState == XMLHttpRequest.DONE) {
+			if (xhr.status == 200) {
+				var js = JSON.parse(xhr.responseText);
+				console.log("XHR: " + xhr.responseText);
+                this.setState({user: js["member"]["name"]});
+            }
+        }
     }
 
     get_name() {
@@ -83,6 +107,9 @@ class ChoiceName extends React.Component {
                 <div className="desc">
                     <p>{"Description: " + this.state.choice_desc}</p>
                 </div>  
+                <div className="signed_in">
+                    <p>{"Signed in as: " + this.state.user}</p>
+                </div>
             </div>
         )
     }
