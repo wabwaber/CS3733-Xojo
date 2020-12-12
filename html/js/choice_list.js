@@ -31,7 +31,8 @@ class ChoiceList extends React.Component {
                         { id: choice["choiceID"], 
                         choice_name: choice["name"],
                         description: choice["description"],
-                        creation_date: choice["dateCreated"] }))
+                        creation_date: choice["timeCreated"],
+                        completed: choice["completed"]}))
                 }
             } else {
                 console.log("actual:" + xhr.responseText)
@@ -41,11 +42,28 @@ class ChoiceList extends React.Component {
             }
         }
 
-        console.log("Sending request");
-        return React.createElement(
-            'div',
-            { },
-            this.state.choices
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            {"Name"}
+                        </th>
+                        <th>
+                            {"ID"}
+                        </th>
+                        <th>
+                            {"Created"}
+                        </th>
+                        <th>
+                            {"Completed"}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.state.choices}
+                </tbody>
+            </table>
         );
     }
 

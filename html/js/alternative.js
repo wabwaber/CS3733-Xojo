@@ -9,7 +9,7 @@ const fullDownvoteUrl = "downvote.png";
 class Alternative extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { id: props.id, description: props.description, 
+        this.state = { id: props.id, description: props.description, complete: props.complete,
             vote: props.vote, approvals: props.approvals, disapprovals: props.disapprovals,
             feedback: props.feedback, showFeedback: false, username: props.user, choice_id: props.choice_id };
         const urlParams = new URLSearchParams(window.location.search);
@@ -27,8 +27,13 @@ class Alternative extends React.Component {
         this.sendFeedback = this.sendFeedback.bind(this);
         this.closeFeedback = this.closeFeedback.bind(this);
     }
-
+    
     upvote() {
+
+        if (this.state.complete) {
+            return;
+        }
+
         // Register a click on the upvote button and send an update to backend
         console.log("Upvoting");
         var self = this;
@@ -72,6 +77,11 @@ class Alternative extends React.Component {
     }
 
     downvote() {
+
+        if (this.state.complete) {
+            return;
+        }
+
         // Register a click on the downvote button and send an update to the backend
         console.log("Downvoting");
         var self = this;
@@ -178,30 +188,30 @@ class Alternative extends React.Component {
         var js = JSON.stringify(data);
         console.log("JS:" + js);
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", add_feedback_url, true);
+        xhr.open("POST", add_feedback_url, false);
 
         xhr.send(js);
 
-        xhr.onloadend = function () {
-            console.log(xhr);
-            if (xhr.readyState == XMLHttpRequest.DONE) {
+        console.log(xhr);
+        if (xhr.readyState == XMLHttpRequest.DONE) {
 
-                // Good response
-                if (xhr.status == 200) {
-                    var js = JSON.parse(xhr.responseText);
+            // Good response
+            if (xhr.status == 200) {
+                var js = JSON.parse(xhr.responseText);
 
-                    if (js["httpCode"] == 200) {
-                        console.log("Feedback sent successfully");
+                if (js["httpCode"] == 200) {
+                    console.log("Feedback sent successfully");
+                    console.log(js);
+                    var timestamp = js["feedback"]["timeCreated"]; 
+                    console.log(timestamp);
+                    self.updateFeedbackList(fb, timestamp);
 
-                        var timestamp = js["timeCreated"]; 
-                        self.updateFeedbackList(fb, timestamp);
-
-                    } else {
-                        alert("There was a problem sending feedback.")
-                    }
+                } else {
+                    alert("There was a problem sending feedback.")
                 }
             }
         }
+
     }
 
     updateFeedbackList(fb, time) {
@@ -215,6 +225,35 @@ class Alternative extends React.Component {
     closeFeedback() {
         console.log("Closing feedback");
         this.setState({showFeedback: false});
+    }
+
+    completeChoice() {
+        // Complete the choice for this alternative
+        var data = {}
+        data["alternativeID"] = this.state.id;
+        data["choiceID"] = this.choice_id;
+
+        var js = JSON.stringify(data);
+        console.log("JS:" + js);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", set_complete_url, false);
+        xhr.send(js);
+
+        console.log(xhr);
+
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.status == 200) {
+                var js = JSON.parse(xhr.responseText);
+                console.log("XHR:" + xhr.responseText);
+                if (js["httpCode"] == 200) {
+                    console.log("Choice Completed");
+                    complete_choice.callback(true, this.state.description);
+                } else {
+                    console.log("Unable to complete alternative");
+                }
+            }
+        }
     }
 
     render() {
@@ -248,14 +287,17 @@ class Alternative extends React.Component {
                 <div className="feedback" style={{margin: "5px", width: "100%", float: "left"}}>
                     <FeedbackList feedback={this.state.feedback}/>
                 </div>
-                <div className="add_feedback" style={{margin: "5px", width: "100%", float: "left"}}>
+                <div className="add_feedback" style={{margin: "5px", width: "70%", float: "left"}}>
                     <div className="feedback_box" style={{display: (this.state.showFeedback ? "block" : "none")}}>
                         <FeedbackBox sendHandler={this.sendFeedback.bind(this)} closeHandler={this.closeFeedback}/>
                     </div>
 
                     <div className="feedback_button" style={{display: (this.state.showFeedback ? "none" : "block")}}>
-                        <button onClick={() => this.openFeedback()}>Add Feedback</button>
+                        <button disabled={this.state.complete} onClick={() => this.openFeedback()}>Add Feedback</button>
                     </div>
+                </div>
+                <div className="complete_choice" style={{margin: "5px", width: "20%", float: "right"}}>
+                    <button disabled={this.state.complete} onClick={() => this.completeChoice()} style={{float: "right"}}>Complete This Alternative</button>
                 </div>
             </div>
         );
@@ -270,7 +312,7 @@ class FeedbackList extends React.Component {
 
     render() {
         const feedback_comments = this.state.feedback.map((fb, index) =>
-            <p key={index}><b>{fb["name"]}</b>{': '}{fb["description"]}</p>
+            <p key={index}><b>{fb["name"] + " at " + Date(fb["timeCreated"]).toString()}</b>{': '}{fb["description"]}</p>
         );
         return (
             <div className="feedback_list">
