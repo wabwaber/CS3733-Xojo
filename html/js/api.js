@@ -13,3 +13,4 @@ var add_feedback_url = base_url + "https://v8swldy9yh.execute-api.us-east-2.amaz
 var get_member_url = base_url + "https://widya6vy29.execute-api.us-east-2.amazonaws.com/default/GetMember";
 var get_feedback_url = base_url + "https://81uk3hjuzd.execute-api.us-east-2.amazonaws.com/default/GetFeedback";
 var set_complete_url = base_url + "https://ni6els0owg.execute-api.us-east-2.amazonaws.com/default/CompleteChoice";
+var delete_choices_url = base_url + "https://wovpnumts0.execute-api.us-east-2.amazonaws.com/default/DeleteChoices";
