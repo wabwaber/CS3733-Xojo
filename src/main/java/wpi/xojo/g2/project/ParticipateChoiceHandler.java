@@ -52,7 +52,7 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 				if (member != null) {
 					response = new ParticipateChoiceResponse(member, true);
 				} else {
-					response = new ParticipateChoiceResponse("Wrong password or choice full", 400);
+					response = new ParticipateChoiceResponse("Wrong password, choice full or choice does not exist", 400);
 				}
 			}
 			

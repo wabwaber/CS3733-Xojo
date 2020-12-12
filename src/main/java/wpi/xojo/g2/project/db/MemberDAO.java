@@ -21,7 +21,7 @@ public class MemberDAO {
     public TeamMember getMember(String name, String choiceID) throws Exception {
     	try {
             TeamMember member = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE memberName = ? and choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE memberName = ? AND choiceID = ?;");
             ps.setString(1,  name);
             ps.setString(2, choiceID);
             ResultSet resultSet = ps.executeQuery();
@@ -63,7 +63,7 @@ public class MemberDAO {
     
     public boolean addMember(TeamMember member) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE memberName = ? and choiceID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE memberName = ? AND choiceID = ?;");
             ps.setString(1, member.name);
             ps.setString(2, member.choiceID);
             ResultSet resultSet = ps.executeQuery();
@@ -95,7 +95,7 @@ public class MemberDAO {
     
     public int countCurrMembers(String choiceID) throws Exception {
     	try {
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember choiceID = ?;");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM TeamMember WHERE choiceID = ?;");
 			ps.setString(1, choiceID);
 		    ResultSet resultSet = ps.executeQuery();
 		    int count = 0;
