@@ -82,7 +82,7 @@ function request_login() {
                         // Undraw loading notification
                         set_loading(false);
 
-                        alert("Choice is full or incorrect password.");
+                        alert("Choice is full, does not exist, or incorrect password.");
                     }
 
                 } else {
