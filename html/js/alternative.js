@@ -188,30 +188,30 @@ class Alternative extends React.Component {
         var js = JSON.stringify(data);
         console.log("JS:" + js);
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", add_feedback_url, true);
+        xhr.open("POST", add_feedback_url, false);
 
         xhr.send(js);
 
-        xhr.onloadend = function () {
-            console.log(xhr);
-            if (xhr.readyState == XMLHttpRequest.DONE) {
+        console.log(xhr);
+        if (xhr.readyState == XMLHttpRequest.DONE) {
 
-                // Good response
-                if (xhr.status == 200) {
-                    var js = JSON.parse(xhr.responseText);
+            // Good response
+            if (xhr.status == 200) {
+                var js = JSON.parse(xhr.responseText);
 
-                    if (js["httpCode"] == 200) {
-                        console.log("Feedback sent successfully");
+                if (js["httpCode"] == 200) {
+                    console.log("Feedback sent successfully");
+                    console.log(js);
+                    var timestamp = js["feedback"]["timeCreated"]; 
+                    console.log(timestamp);
+                    self.updateFeedbackList(fb, timestamp);
 
-                        var timestamp = js["timeCreated"]; 
-                        self.updateFeedbackList(fb, timestamp);
-
-                    } else {
-                        alert("There was a problem sending feedback.")
-                    }
+                } else {
+                    alert("There was a problem sending feedback.")
                 }
             }
         }
+
     }
 
     updateFeedbackList(fb, time) {
@@ -312,7 +312,7 @@ class FeedbackList extends React.Component {
 
     render() {
         const feedback_comments = this.state.feedback.map((fb, index) =>
-            <p key={index}><b>{fb["name"]}</b>{': '}{fb["description"]}</p>
+            <p key={index}><b>{fb["name"] + " at " + Date(fb["timeCreated"]).toString()}</b>{': '}{fb["description"]}</p>
         );
         return (
             <div className="feedback_list">
