@@ -33,14 +33,11 @@ public class ParticipateChoiceHandlerTest extends LambdaTest {
 	@Test
 	public void test() {
 		ParticipateChoiceRequest success = new ParticipateChoiceRequest("2", "Participant", "");
-		ParticipateChoiceRequest success2 = new ParticipateChoiceRequest("2", "Participant", "");
 		ParticipateChoiceRequest fail = new ParticipateChoiceRequest("not real", "This won't work hopefully", "");
 		String successJSON = new Gson().toJson(success);
-		String success2JSON = new Gson().toJson(success2);
 		String failJSON = new Gson().toJson(fail);
 		try {
 			testSuccessInput(successJSON);
-			testSuccessInput(success2JSON);
 			testFailInput(failJSON);
 		} catch (IOException ioe) {
 			Assert.fail("Invalid:" + ioe.getMessage());
