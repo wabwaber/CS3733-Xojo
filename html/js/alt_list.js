@@ -3,8 +3,15 @@
 class AltList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { alternatives: [] };
+        this.state = { alternatives: [], complete: false, completed_choice: null };
         this.get_alternatives();
+    }
+
+    componentDidMount() {
+        complete_choice.callback = (complete, choice) => {
+            this.setState({complete: complete, completed_choice: choice});
+            console.log("COMPLETED? " + this.state.complete);
+        }
     }
 
     get_username(urlParams) {
@@ -123,6 +130,7 @@ class AltList extends React.Component {
                     this.state.alternatives.push(React.createElement(Alternative, 
                         {id: alt["alternativeID"], 
                         description: alt["description"],
+                        complete: this.state.complete,
                         vote: 0,
                         feedback: feedback,
                         approvals: votes.approvals,
@@ -132,8 +140,6 @@ class AltList extends React.Component {
                         key: alt["alternativeID"]
                     }))
                 }
-
-                set_loading(false);
 
             } else {
                 console.log("actual:" + xhr.responseText)
@@ -148,7 +154,14 @@ class AltList extends React.Component {
         console.log("Sending request");
         return (
             <div>
-                {this.state.alternatives}
+                <div style={{display: (this.state.complete ? "none" : "block")}}>
+                    {this.state.alternatives}
+                </div>
+                <div style={{display: (this.state.complete ? "block" : "none")}}>
+                    <h3>This Choice has been completed.</h3>
+                    <h4>Selected Choice:</h4>
+                    <p>{this.state.completed_choice}</p>
+                </div>
             </div>
         )
     }
