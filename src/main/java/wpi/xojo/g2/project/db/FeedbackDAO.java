@@ -32,6 +32,7 @@ public class FeedbackDAO {
     		while (resultSet.next()) {
     			String name = resultSet.getString("memberName");
     			String desc = resultSet.getString("feedbackDesc");
+    			System.out.println(desc);
     			Timestamp time = resultSet.getTimestamp("timeCreated");
     			feedback.add(new FeedbackName(name, desc, time));
     		}

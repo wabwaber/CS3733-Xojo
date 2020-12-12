@@ -7,11 +7,11 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import wpi.xojo.g2.project.db.ChoiceDAO;
 import wpi.xojo.g2.project.db.MemberDAO;
 import wpi.xojo.g2.project.http.ParticipateChoiceRequest;
-import wpi.xojo.g2.project.http.ParticipateChoiceResponce;
+import wpi.xojo.g2.project.http.ParticipateChoiceResponse;
 import wpi.xojo.g2.project.model.Choice;
 import wpi.xojo.g2.project.model.TeamMember;
 
-public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoiceRequest,ParticipateChoiceResponce> {
+public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoiceRequest,ParticipateChoiceResponse> {
 	
 	LambdaLogger logger;
 	
@@ -37,27 +37,27 @@ public class ParticipateChoiceHandler implements RequestHandler<ParticipateChoic
 	
 	
 	@Override
-	public ParticipateChoiceResponce handleRequest(ParticipateChoiceRequest req, Context context) {
+	public ParticipateChoiceResponse handleRequest(ParticipateChoiceRequest req, Context context) {
 		
 		logger = context.getLogger();
 		logger.log(req.toString());
 		
-		ParticipateChoiceResponce response;
+		ParticipateChoiceResponse response;
 		try {
 			TeamMember member = getMember(req.choiceID, req.name, req.password);
 			if (member != null) {
-				response = new ParticipateChoiceResponce(member, false);
+				response = new ParticipateChoiceResponse(member, false);
 			} else {
 				member = createMember(req.choiceID, req.name, req.password);
 				if (member != null) {
-					response = new ParticipateChoiceResponce(member, true);
+					response = new ParticipateChoiceResponse(member, true);
 				} else {
-					response = new ParticipateChoiceResponce("Wrong password or choice full", 400);
+					response = new ParticipateChoiceResponse("Wrong password or choice full", 400);
 				}
 			}
 			
 		} catch (Exception e) {
-			response = new ParticipateChoiceResponce("Unable to participate member: " + req.name + " (" + e.getMessage() + ")", 400);
+			response = new ParticipateChoiceResponse("Unable to participate member: " + req.name + " (" + e.getMessage() + ")", 400);
 		}
 		
 		return response;

@@ -20,13 +20,24 @@ public class ChangeVoteHandlerTest extends LambdaTest {
 		Assert.assertEquals(200, resp.httpCode);
 	}
 	
+	void testFailInput(String incoming) throws IOException {
+		ChangeVoteHandler handler = new ChangeVoteHandler();
+		ChangeVoteRequest req = new Gson().fromJson(incoming, ChangeVoteRequest.class);
+		
+		ChangeVoteResponse resp = handler.handleRequest(req, createContext("create"));
+		Assert.assertNotEquals(200, resp.httpCode);
+	}
+	
 	@Test
 	public void test() {
-		ChangeVoteRequest ccr = new ChangeVoteRequest("764da34e-2828-465e-b9cc-0e2fe881d91a", "d6decafa-fb62-403d-8172-2e0e0e226a93", new Boolean(true));
-		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
+		ChangeVoteRequest success = new ChangeVoteRequest("2", "2", new Boolean(true));
+		ChangeVoteRequest fail = new ChangeVoteRequest("Not real", "Not real", new Boolean(true));
+		String successJSON = new Gson().toJson(success);
+		String failJSON = new Gson().toJson(fail);
 		
 		try {
-			testSuccessInput(SAMPLE_INPUT_STRING);
+			testSuccessInput(successJSON);
+			testFailInput(failJSON);
 		} catch (IOException ioe) {
 			Assert.fail("Invalid:" + ioe.getMessage());
 		}

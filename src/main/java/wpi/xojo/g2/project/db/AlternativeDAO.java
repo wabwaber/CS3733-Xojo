@@ -6,8 +6,6 @@ import wpi.xojo.g2.project.model.Alternative;
 
 public class AlternativeDAO {
 	java.sql.Connection conn;
-	
-	final String tblName = "Alternative";   // Exact capitalization
 
     public AlternativeDAO() {
     	try  {
@@ -20,7 +18,7 @@ public class AlternativeDAO {
     public Alternative getAlternative(String ID) throws Exception {
     	try {
             Alternative alternative = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative WHERE alternativeID = ?");
             ps.setString(1,  ID);
             ResultSet resultSet = ps.executeQuery();
             
@@ -40,7 +38,7 @@ public class AlternativeDAO {
 
 	public boolean addAlternative(Alternative alternative) throws Exception {
 		try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Alternative WHERE alternativeID = ?;");
             ps.setString(1, alternative.alternativeID);
             ResultSet resultSet = ps.executeQuery();
             
@@ -51,7 +49,7 @@ public class AlternativeDAO {
             
             resultSet.close();
             
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (alternativeID,choiceID,alternativeDesc,selected) values(?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO Alternative (alternativeID,choiceID,alternativeDesc,selected) values(?,?,?,?);");
             ps.setString(1, alternative.alternativeID);
             ps.setString(2, alternative.choiceID);
             ps.setString(3, alternative.description);
@@ -106,6 +104,9 @@ public class AlternativeDAO {
 	        	if(!vdao.deleteVotes(id)) {
 	        		return false;
 	        	}
+	        	ps = conn.prepareStatement("DELETE FROM Alternative WHERE alternativeID = ?");
+	        	ps.setString(1, id);
+	        	ps.executeUpdate();
 	        }
 	        return true;
     	} catch (Exception e) {

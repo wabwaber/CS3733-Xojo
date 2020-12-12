@@ -20,13 +20,23 @@ public class GetChoiceHandlerTest extends LambdaTest {
 		Assert.assertEquals(200, resp.httpCode);
 	}
 	
+	void testFailInput(String incoming) throws IOException {
+		GetChoiceHandler handler = new GetChoiceHandler();
+		GetChoiceRequest req = new Gson().fromJson(incoming, GetChoiceRequest.class);
+		
+		GetChoiceResponse resp = handler.handleRequest(req, createContext("create"));
+		Assert.assertNotEquals(200, resp.httpCode);
+	}
+	
 	@Test
 	public void testGet() {
-		GetChoiceRequest ccr = new GetChoiceRequest("e781cbeb-afeb-43e3-b49d-ea8e5db85fa2");
-		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
-		
+		GetChoiceRequest success = new GetChoiceRequest("1");
+		GetChoiceRequest fail = new GetChoiceRequest("Does not exist");
+		String successJson = new Gson().toJson(success);
+		String failJson = new Gson().toJson(fail);
 		try {
-			testSuccessInput(SAMPLE_INPUT_STRING);
+			testSuccessInput(successJson);
+			testFailInput(failJson);
 		} catch (IOException ioe) {
 			Assert.fail("Invalid:" + ioe.getMessage());
 		}

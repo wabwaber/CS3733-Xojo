@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import wpi.xojo.g2.project.http.SetVotesRequest;
 import wpi.xojo.g2.project.http.SetVotesResponse;
 
+
 public class SetVotesHandlerTest extends LambdaTest {
 
 	void testSuccessInput(String incoming) throws IOException {
@@ -20,16 +21,25 @@ public class SetVotesHandlerTest extends LambdaTest {
 		Assert.assertEquals(200, resp.httpCode);
 	}
 	
+	void testFailInput(String incoming) throws IOException {
+		SetVotesHandler handler = new SetVotesHandler();
+		SetVotesRequest req = new Gson().fromJson(incoming, SetVotesRequest.class);
+		
+		SetVotesResponse resp = handler.handleRequest(req, createContext("create"));
+		Assert.assertNotEquals(200, resp.httpCode);
+	}
+	
 	@Test
 	public void test() {
-		SetVotesRequest ccr = new SetVotesRequest("59be4ecb-dc79-47b6-b96c-578458c0c802", "6457584e-25d7-4a01-a1c5-2aec84f9345f");
-		String SAMPLE_INPUT_STRING = new Gson().toJson(ccr);
-		
+		SetVotesRequest success = new SetVotesRequest("2", "3");
+		SetVotesRequest fail = new SetVotesRequest("not real", "not real");
+		String successJSON = new Gson().toJson(success);
+		String failJSON = new Gson().toJson(fail);
 		try {
-			testSuccessInput(SAMPLE_INPUT_STRING);
+			testSuccessInput(successJSON);
+			testFailInput(failJSON);
 		} catch (IOException ioe) {
 			Assert.fail("Invalid:" + ioe.getMessage());
 		}
 	}
-
 }

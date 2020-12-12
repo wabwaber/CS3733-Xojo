@@ -11,8 +11,6 @@ import wpi.xojo.g2.project.model.Vote;
 public class VoteDAO {
 	
 	java.sql.Connection conn;
-	
-	final String tblName = "Vote";   // Exact capitalization
 
     public VoteDAO() {
     	try  {
@@ -25,7 +23,7 @@ public class VoteDAO {
     public Vote getVote(String alternativeID, String memberID) throws Exception {
     	try {
     		Vote vote = null;
-    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ? and memberID = ?;");
+    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Vote WHERE alternativeID = ? and memberID = ?;");
             ps.setString(1, alternativeID);
             ps.setString(2, memberID);
             ResultSet resultSet = ps.executeQuery();
@@ -46,7 +44,7 @@ public class VoteDAO {
     
     public boolean addVote(Vote vote) throws Exception {
     	try {
-    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ? and memberID = ?;");
+    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Vote WHERE alternativeID = ? and memberID = ?;");
             ps.setString(1, vote.alternativeID);
             ps.setString(2, vote.memberID);
             ResultSet resultSet = ps.executeQuery();
@@ -59,7 +57,7 @@ public class VoteDAO {
             
             resultSet.close();
             
-            ps = conn.prepareStatement("INSERT INTO " + tblName + " (alternativeID,memberID,isUpvote) values(?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO Vote (alternativeID,memberID,isUpvote) values(?,?,?);");
             ps.setString(1, vote.alternativeID);
             ps.setString(2, vote.memberID);
             ps.setObject(3, vote.isUpvote);
@@ -74,14 +72,14 @@ public class VoteDAO {
     public Vote changeVote(String alternativeID, String memberID, Boolean isUpvote) throws Exception {
     	try {
     		Vote vote = null;
-    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + tblName + " WHERE alternativeID = ? and memberID = ?;");
+    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Vote WHERE alternativeID = ? and memberID = ?;");
             ps.setString(1, alternativeID);
             ps.setString(2, memberID);
             ResultSet resultSet = ps.executeQuery();
             
             if (resultSet.next()) {
             	ps.close();
-            	ps = conn.prepareStatement("UPDATE " + tblName + " SET isUpvote = ? WHERE alternativeID = ? AND memberID = ?;");
+            	ps = conn.prepareStatement("UPDATE Vote SET isUpvote = ? WHERE alternativeID = ? AND memberID = ?;");
             	ps.setObject(1, isUpvote);
             	ps.setString(2, alternativeID);
                 ps.setString(3, memberID);

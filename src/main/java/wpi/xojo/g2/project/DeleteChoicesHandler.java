@@ -1,7 +1,5 @@
 package wpi.xojo.g2.project;
 
-import java.sql.Timestamp;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -14,7 +12,7 @@ public class DeleteChoicesHandler implements RequestHandler<DeleteChoicesRequest
 
 	LambdaLogger logger;
 	
-	boolean deleteChoices(Timestamp time) throws Exception {
+	boolean deleteChoices(Long time) throws Exception {
 		ChoiceDAO dao = new ChoiceDAO();
 		return dao.deleteChoices(time);
 	}
