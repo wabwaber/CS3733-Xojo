@@ -311,9 +311,10 @@ class FeedbackList extends React.Component {
     }
 
     render() {
-        const feedback_comments = this.state.feedback.map((fb, index) =>
-            <p key={index}><b>{fb["name"] + " at " + Date(fb["timeCreated"]).toString()}</b>{': '}{fb["description"]}</p>
-        );
+        const feedback_comments = this.state.feedback.map((fb, index) => {
+            var fb_time = new Date(fb["timeCreated"]);
+            return (<p key={index}><b>{fb["name"] + " at " + fb_time.toString()}</b>{': '}{fb["description"]}</p>);
+        });
         return (
             <div className="feedback_list">
                 {feedback_comments}
